@@ -10,6 +10,10 @@ use LuxChill\Controllers\Admin\ProductController;
 use LuxChill\Controllers\Admin\UserController;
 use LuxChill\Controllers\Admin\VoucherController;
 
+// $router->before('GET|POST', '/admin/*.*', function () {
+// 	middleware_auth();
+// });
+
 $router->mount('/admin', function () use ($router) {
 	// route dashboard
 	$router->get('/', 				DashboardController::class 	. '@index');
@@ -20,8 +24,8 @@ $router->mount('/admin', function () use ($router) {
 		$router->post('/store',		CategoryController::class 	. '@store');
 		$router->get('/{id}/show', 	CategoryController::class 	. '@show');
 		$router->get('/{id}/edit', 	CategoryController::class 	. '@edit');
-		$router->put('/{id}', 		CategoryController::class 	. '@update');
-		$router->delete('/{id}', 	CategoryController::class 	. '@delete');
+		$router->post('/{id}/update', 		CategoryController::class 	. '@update');
+		$router->get('/{id}/delete', 	CategoryController::class 	. '@delete');
 		$router->get('/{id}', 		CategoryController::class 	. '@index');
 	});
 	// route comments
@@ -31,7 +35,7 @@ $router->mount('/admin', function () use ($router) {
 		$router->post('/store', 		CommentController::class 	. '@store');
 		$router->get('/{id}/show', 	CommentController::class 	. '@show');
 		$router->get('/{id}/edit', 	CommentController::class 	. '@edit');
-		$router->put('/{id}', 		CommentController::class 	. '@update');
+		$router->get('/{id}', 		CommentController::class 	. '@update');
 		$router->delete('/{id}', 	CommentController::class 	. '@delete');
 		$router->get('/{id}', 		CommentController::class 	. '@index');
 	});
@@ -42,8 +46,8 @@ $router->mount('/admin', function () use ($router) {
 		$router->post('/store', 		OrderController::class 		. '@store');
 		$router->get('/{id}/show', 	OrderController::class 		. '@show');
 		$router->get('/{id}/edit', 	OrderController::class 		. '@edit');
-		$router->put('/{id}', 		OrderController::class 		. '@update');
-		$router->delete('/{id}', 	OrderController::class 		. '@delete');
+		$router->post('/{id}', 		OrderController::class 		. '@update');
+		$router->get('/{id}', 	OrderController::class 		. '@delete');
 		$router->get('/{id}', 		OrderController::class 		. '@index');
 	});
 	// route products
@@ -53,20 +57,20 @@ $router->mount('/admin', function () use ($router) {
 		$router->post('/store', 		ProductController::class 	. '@store');
 		$router->get('/{id}/show', 	ProductController::class 	. '@show');
 		$router->get('/{id}/edit', 	ProductController::class 	. '@edit');
-		$router->put('/{id}', 		ProductController::class 	. '@update');
-		$router->delete('/{id}', 	ProductController::class 	. '@delete');
-		$router->get('/{id}', 		ProductController::class 	. '@index');
+		$router->post('/{id}/update', 		ProductController::class 	. '@update');
+		$router->get('/{id}/delete', 	ProductController::class 	. '@delete');
+		$router->get('/{id}', 		ProductController::class 	. '@show');
 	});
 	// route users
 	$router->mount('/users', function () use ($router) {
 		$router->get('/', 			UserController::class 		. '@index');
 		$router->get('/create', 		UserController::class 		. '@create');
 		$router->post('/store', 		UserController::class 		. '@store');
-		$router->get('/{id}/show', 	UserController::class 		. '@show');
+//		$router->get('/{id}/show', 	UserController::class 		. '@show');
 		$router->get('/{id}/edit', 	UserController::class 		. '@edit');
-		$router->put('/{id}', 		UserController::class 		. '@update');
-		$router->delete('/{id}', 	UserController::class 		. '@delete');
-		$router->get('/{id}', 		UserController::class 		. '@index');
+		$router->post('/{id}/update', 		UserController::class 		. '@update');
+		$router->get('/{id}/delete', 	UserController::class 		. '@delete');
+		$router->get('/{id}', 		UserController::class 		. '@show');
 	});
 	// route vouchers
 	$router->mount('/vouchers', function () use ($router) {
@@ -75,8 +79,8 @@ $router->mount('/admin', function () use ($router) {
 		$router->post('/store', 		VoucherController::class 	. '@store');
 		$router->get('/{id}/show', 	VoucherController::class 	. '@show');
 		$router->get('/{id}/edit', 	VoucherController::class 	. '@edit');
-		$router->put('/{id}', 		VoucherController::class 	. '@update');
-		$router->delete('/{id}', 	VoucherController::class 	. '@delete');
+		$router->post('/{id}', 		VoucherController::class 	. '@update');
+		$router->get('/{id}', 	VoucherController::class 	. '@delete');
 		$router->get('/{id}', 		VoucherController::class 	. '@index');
 	});
 });

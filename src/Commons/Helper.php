@@ -1,6 +1,7 @@
 <?php
 
 namespace LuxChill\Commons;
+
 class Helper
 {
 	public static function debug($data)

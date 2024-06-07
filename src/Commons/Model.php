@@ -1,14 +1,19 @@
 <?php
+
 namespace LuxChill\Commons;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class Model
 {
-	protected $connect;
-	protected $queryBuilder;
+	protected Connection|null $connect;
+	protected QueryBuilder $queryBuilder;
 	protected string $tableName;
+	protected const PER_PAGE = 10;
+	//	protected const int $perPage = 10;
 
 	public function __construct()
 	{
@@ -24,7 +29,7 @@ class Model
 		$this->queryBuilder = $this->connect->createQueryBuilder();
 	}
 
-	protected function getAll(...$columns)
+	public function getAll(...$columns)
 	{
 		try {
 			return $this->queryBuilder
@@ -36,34 +41,104 @@ class Model
 		}
 	}
 
-	protected function getOne($id)
+	public function getOne($id)
 	{
 		try {
 			return $this->queryBuilder
 				->select('*')
 				->from($this->tableName)
-				->where($id)
+				->where('id = :id')
+				->setParameter("id", $id)
 				->fetchAssociative();
 		} catch (Exception $e) {
 			die("Err" . $e->getMessage());
 		}
 	}
 
-	protected function paginate($page, $perPage = 10)
+	public function count()
 	{
-
+		try {
+			return $this->queryBuilder
+				->select("COUNT(*)")
+				->from($this->tableName)
+				->fetchOne();
+		} catch (\Exception $e) {
+			die("LuxChill: " . $e->getMessage());
+		}
 	}
 
-	protected function insert($data) {
+	public function paginate($page = 1, $perPage =  self::PER_PAGE)
+	{
+		$queryBuilder = clone ($this->queryBuilder);
+		$totalPage = ceil($this->count() / $perPage);
+		$offset = $perPage * ($page - 1);
+		try {
+			$data = $queryBuilder
+				->select('*')
+				->from($this->tableName)
+				->setFirstResult($offset)
+				->setMaxResults($perPage)
+				->orderBy('id', 'DESC')
+				->fetchAllAssociative();
 
+			return [$data, $totalPage];
+		} catch (Exception $e) {
+			die($e->getMessage());
+		}
 	}
 
-	protected function update($id, $data) {
+	public function insert(array $data)
+	{
+		if (!empty($data)) {
+			$query = $this->queryBuilder->insert($this->tableName);
 
+			$index = 0;
+			foreach ($data as $key => $value) {
+				$query->setValue($key, '?')->setParameter($index, $value);
+				++$index;
+			}
+
+			$query->executeQuery();
+
+			return true;
+		}
+
+		return false;
 	}
 
-	protected function delete($id) {
+	public function update($id,	array $data)
+	{
+		if (!empty($data)) {
+			$query = $this->queryBuilder->update($this->tableName);
 
+			$index = 0;
+			foreach ($data as $key => $value) {
+				$query->set($key, '?')->setParameter($index, $value);
+
+				++$index;
+			}
+
+			$query->where('id = ?')
+				->setParameter(count($data), $id)
+				->executeQuery();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function delete($id)
+	{
+		try {
+			return $this->queryBuilder
+				->delete($this->tableName)
+				->where('id = :id')
+				->setParameter('id', $id)
+				->executeQuery();
+		} catch (\Exception $e) {
+			die("LuxChill: " . $e->getMessage());
+		}
 	}
 
 	public function __destruct()

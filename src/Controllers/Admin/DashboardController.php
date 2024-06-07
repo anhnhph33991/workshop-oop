@@ -8,6 +8,6 @@ class DashboardController extends Controller
 {
 	public function index()
 	{
-		echo 'dashboard ' . __FUNCTION__;
+		return $this->renderAdmin('dashboard');
 	}
 }
