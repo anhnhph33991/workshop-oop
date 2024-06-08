@@ -28,7 +28,7 @@
                                 <a href="{{ routeClient() }}">Home</a>
                             </li>
                             <li>
-                                <a href="{{ routeClient('products') }}">Shop</a>
+                                <a href="{{ routeClient('shops') }}">Shop</a>
                             </li>
                             <li>
                                 <a href="{{ routeClient('about') }}">About</a>

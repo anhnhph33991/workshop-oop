@@ -17,6 +17,7 @@ class UserController extends Controller implements InterfaceCrudController
 	{
 		parent::__construct();
 		$this->users = new User();
+
 	}
 
 	public function index()

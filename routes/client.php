@@ -2,12 +2,18 @@
 
 /** @var TYPE_NAME $router */
 
+use LuxChill\Controllers\Client\AuthController;
 use LuxChill\Controllers\Client\HomeController;
+use LuxChill\Controllers\Client\ShopController;
 
 $router->get('/', HomeController::class . '@index');
 $router->get('/about', function () {
     echo "Page about";
 });
+
+$router->get('shops', ShopController::class . '@index');
+//$router->get('shop/{id}', ShopController::class . '@detail');
+$router->get('shop/{slug}', ShopController::class . '@detail');
 
 $router->get('/products', function () {
     echo "Page products";
@@ -44,17 +50,16 @@ $router->get('/profile', function () {
 
 // auth route
 
-$router->get('/login', HomeController::class . '@login');
+$router->get('/login', AuthController::class . '@login');
 
-$router->post('/handle-login', function () {
-    echo "Handle Login";
-});
+$router->post('/handle-login', AuthController::class . '@handleLogin');
 
-$router->get('/register', HomeController::class . '@register');
+$router->get('/register', AuthController::class . '@register');
 
-$router->post('/handle-register', function () {
-    echo "Handle register";
-});
+$router->post('/handle-register', AuthController::class . '@handleRegister');
+
+$router->get('/logout', AuthController::class . '@logout');
+
 
 $router->get('/forgot-password', function () {
     echo "Handle forgot-password";

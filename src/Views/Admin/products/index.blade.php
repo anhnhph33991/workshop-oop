@@ -81,7 +81,7 @@
                                             </div>
                                         </th>
                                         <th>Image</th>
-                                        <th>Sku</th>
+{{--                                        <th>Sku</th>--}}
                                         <th>Name</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
@@ -114,11 +114,11 @@
                                                     </div>
                                                 </div>
                                             </td>
+{{--                                            <td>--}}
+{{--                                                {{ $product['sku'] }}--}}
+{{--                                            </td>--}}
                                             <td>
-                                                {{ $product['sku'] }}
-                                            </td>
-                                            <td>
-                                                {{ $product['p_name'] }}
+                                                {{ formatStrlen($product['p_name'], 20, 10) }}
                                             </td>
                                             <td>
                                                 {{ formatPrice($product['price_offer'] ?: $product['price']) . 'đ'}}
@@ -200,4 +200,8 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('javascript')
+    <script src="{{ asset('admin/js/page/features-posts.js') }}"></script>
 @endsection

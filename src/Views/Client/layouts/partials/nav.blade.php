@@ -1,10 +1,19 @@
+@php use LuxChill\Models\Category; @endphp
+@php
+
+    $category = new Category();
+    $categories = $category->getAll('*');
+
+@endphp
+
 <div class="main_nav Sticky">
     <div class="container">
         <div class="row small-gutters">
             <div class="col-xl-3 col-lg-3 col-md-3">
                 <nav class="categories">
                     <ul class="clearfix">
-                        <li><span>
+                        <li>
+                            <span>
                                 <a href="#">
                                     <span class="hamburger hamburger--spin">
                                         <span class="hamburger-box">
@@ -16,57 +25,13 @@
                             </span>
                             <div id="menu">
                                 <ul>
-                                    <li><span><a href="#0">Collections</a></span>
-                                        <ul>
-                                            <li><a href="listing-grid-1-full.html">Trending</a></li>
-                                            <li><a href="listing-grid-2-full.html">Life style</a></li>
-                                            <li><a href="listing-grid-3.html">Running</a></li>
-                                            <li><a href="listing-grid-4-sidebar-left.html">Training</a></li>
-                                            <li><a href="listing-grid-5-sidebar-right.html">View all Collections</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li><span><a href="#">Men</a></span>
-                                        <ul>
-                                            <li><a href="listing-grid-6-sidebar-left.html">Offers</a></li>
-                                            <li><a href="listing-grid-7-sidebar-right.html">Shoes</a></li>
-                                            <li><a href="listing-row-1-sidebar-left.html">Clothing</a></li>
-                                            <li><a href="listing-row-3-sidebar-left.html">Accessories</a></li>
-                                            <li><a href="listing-row-4-sidebar-extended.html">Equipment</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><span><a href="#">Women</a></span>
-                                        <ul>
-                                            <li><a href="listing-grid-1-full.html">Best Sellers</a></li>
-                                            <li><a href="listing-grid-2-full.html">Clothing</a></li>
-                                            <li><a href="listing-grid-3.html">Accessories</a></li>
-                                            <li><a href="listing-grid-4-sidebar-left.html">Shoes</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><span><a href="#">Boys</a></span>
-                                        <ul>
-                                            <li><a href="listing-grid-6-sidebar-left.html">Easy On Shoes</a></li>
-                                            <li><a href="listing-grid-7-sidebar-right.html">Clothing</a></li>
-                                            <li><a href="listing-row-3-sidebar-left.html">Must Have</a></li>
-                                            <li><a href="listing-row-4-sidebar-extended.html">All Boys</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><span><a href="#">Girls</a></span>
-                                        <ul>
-                                            <li><a href="listing-grid-1-full.html">New Releases</a></li>
-                                            <li><a href="listing-grid-2-full.html">Clothing</a></li>
-                                            <li><a href="listing-grid-3.html">Sale</a></li>
-                                            <li><a href="listing-grid-4-sidebar-left.html">Best Sellers</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><span><a href="#">Customize</a></span>
-                                        <ul>
-                                            <li><a href="listing-row-1-sidebar-left.html">For Men</a></li>
-                                            <li><a href="listing-row-2-sidebar-right.html">For Women</a></li>
-                                            <li><a href="listing-row-4-sidebar-extended.html">For Boys</a></li>
-                                            <li><a href="listing-grid-1-full.html">For Girls</a></li>
-                                        </ul>
-                                    </li>
+                                    @foreach($categories as $c)
+                                        <li>
+                                            <span>
+                                                <a href="{{ routeClient('shops?c=' . $c['slug'] . '&id=' . $c['id']) }}">{{ $c['name'] }}</a>
+                                            </span>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </li>
@@ -92,8 +57,8 @@
                                         <a href="product-detail-1.html">
                                             <figure>
                                                 <img src="img/products/product_placeholder_square_small.jpg"
-                                                    data-src="img/products/shoes/thumb/1.jpg" alt="" width="50"
-                                                    height="50" class="lazy">
+                                                     data-src="img/products/shoes/thumb/1.jpg" alt="" width="50"
+                                                     height="50" class="lazy">
                                             </figure>
                                             <strong><span>1x Armor Air x Fear</span>$90.00</strong>
                                         </a>
@@ -102,8 +67,8 @@
                                     <li>
                                         <a href="product-detail-1.html">
                                             <figure><img src="img/products/product_placeholder_square_small.jpg"
-                                                    data-src="img/products/shoes/thumb/2.jpg" alt="" width="50"
-                                                    height="50" class="lazy"></figure>
+                                                         data-src="img/products/shoes/thumb/2.jpg" alt="" width="50"
+                                                         height="50" class="lazy"></figure>
                                             <strong><span>1x Armor Okwahn II</span>$110.00</strong>
                                         </a>
                                         <a href="0" class="action"><i class="ti-trash"></i></a>
@@ -129,25 +94,32 @@
                             <div class="dropdown-menu">
 
                                 @if (!isset($_SESSION['user']))
-                                <a href="{{ routeClient('login') }}" class="btn_1">
-                                    Login or Register
-                                </a>
+                                    <a href="{{ routeClient('login') }}" class="btn_1">
+                                        Login or Register
+                                    </a>
                                 @else
-                                <a href="{{ routeClient('account') }}" class="btn_1">
-                                    {{ $_SESSION['user']['username'] }}
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ routeClient('track-order') }}"><i class="ti-truck"></i>Track your
-                                            Order</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ routeClient('my-orders') }}"><i class="ti-package"></i>My Orders</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ routeClient('profile') }}"><i class="ti-user"></i>My Profile</a>
-                                    </li>
-                                </ul>
+                                    <a href="{{ routeClient('account') }}" class="btn_1">
+                                        {{ $_SESSION['user']['username'] }}
+                                    </a>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ routeClient('track-order') }}"><i class="ti-truck"></i>Track
+                                                your
+                                                Order</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ routeClient('my-orders') }}"><i class="ti-package"></i>My Orders</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ routeClient('profile') }}"><i class="ti-user"></i>My Profile</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ routeClient('logout') }}">
+                                                <i class="ri-logout-box-r-line" style="margin-top: -5px"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
                                 @endif
 
                             </div>

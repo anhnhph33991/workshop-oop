@@ -106,11 +106,12 @@ if (!function_exists('upload_multifile')) {
 }
 
 
-if(!function_exists('validateImage')){
-	function validateImage($image){
-		if(!$image['error'][0] == UPLOAD_ERR_NO_FILE){
+if (!function_exists('validateImage')) {
+	function validateImage($image)
+	{
+		if (!$image['error'][0] == UPLOAD_ERR_NO_FILE) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -167,6 +168,46 @@ if (!function_exists('middleware_auth')) {
 	}
 }
 
+if (!function_exists('middleware_login')) {
+	function middleware_login($password, $user)
+	{
+//		$check = password_verify($password, $user['password']);
+
+//		echo "<pre>";
+//		var_dump($check);
+//		echo "</pre>";
+
+
+		if (password_verify($password, $user['password'])) {
+			$_SESSION['user'] = $user;
+			if ($user['role'] == 1) {
+				setToastr('Dang Nhap Thanh Cong', 'success');
+				header('location: ' . routeAdmin());
+				exit();
+			} else {
+				setToastr('Dang Nhap Thanh Cong', 'success');
+				header('location: ' . routeClient());
+				exit();
+			}
+//			echo "success";
+		} else {
+			$_SESSION['errors']['password'] = 'Password k chinh xac';
+			header('location: ' . routeClient('login'));
+			echo "failed";
+		}
+	}
+}
+
+if (!function_exists('middleware_user_auth')) {
+	function middleware_user_auth()
+	{
+		if (isset($_SESSION['user'])) {
+			header('location: ' . routeClient());
+			exit();
+		}
+	}
+}
+
 if (!function_exists('active_account')) {
 	function active_account()
 	{
@@ -185,7 +226,7 @@ if (!function_exists('prevPage')) {
 if (!function_exists('nextPage')) {
 	function nextPage($uri, $page, $totalPage)
 	{
-		return routeAdmin( $uri .'?page=' . ($page == $totalPage ? $page : $page + 1));
+		return routeAdmin($uri . '?page=' . ($page == $totalPage ? $page : $page + 1));
 	}
 }
 
@@ -201,6 +242,27 @@ if (!function_exists('formatPrice')) {
 	function formatPrice($price)
 	{
 		return number_format($price);
+	}
+}
+
+if (!function_exists('isValidateMultipleImage')) {
+	function isValidateMultipleImage($files)
+	{
+		$check = false;
+		foreach ($files['error'] as $file) {
+			if ($file != UPLOAD_ERR_NO_FILE) {
+				$check = true;
+				break;
+			}
+		}
+		return $check;
+	}
+}
+
+if (!function_exists('formatStrlen')) {
+	function formatStrlen($string, $max, $length)
+	{
+		return strlen($string) > $max ? substr($string, 0, $length) . '...' : $string;
 	}
 }
 

@@ -10,9 +10,9 @@ use LuxChill\Controllers\Admin\ProductController;
 use LuxChill\Controllers\Admin\UserController;
 use LuxChill\Controllers\Admin\VoucherController;
 
-// $router->before('GET|POST', '/admin/*.*', function () {
-// 	middleware_auth();
-// });
+ $router->before('GET|POST', '/admin/*.*', function () {
+ 	middleware_auth();
+ });
 
 $router->mount('/admin', function () use ($router) {
 	// route dashboard
