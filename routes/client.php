@@ -2,8 +2,12 @@
 
 /** @var TYPE_NAME $router */
 
+use LuxChill\Controllers\Client\AccountController;
 use LuxChill\Controllers\Client\AuthController;
+use LuxChill\Controllers\Client\CartController;
+use LuxChill\Controllers\Client\CheckOutController;
 use LuxChill\Controllers\Client\HomeController;
+use LuxChill\Controllers\Client\Orders;
 use LuxChill\Controllers\Client\ShopController;
 
 $router->get('/', HomeController::class . '@index');
@@ -24,25 +28,24 @@ $router->get('/products/{id}', function ($id) {
     echo "Page product detail = " . $id;
 });
 
-$router->get('/cart', function () {
-    echo "Page cart";
-});
+$router->get('/cart', CartController::class . '@index');
+$router->post('/cart/add', CartController::class . '@add');
+$router->post('/cart/update', CartController::class . '@update');
+$router->get('/cart/delete/{id}', CartController::class . '@delete');
 
-$router->get('/check-out', function () {
-    echo "Page check-out";
-});
 
-$router->get('/track-order', function () {
-    echo "Page track-order";
-});
+$router->get('/check-out', CheckOutController::class . '@index');
+
+$router->get('/confirm', CheckOutController::class . '@confirm');
+
+
+$router->get('/track-order', Orders::class . '@check');
 
 $router->get('/my-orders', function () {
     echo "Page my-orders";
 });
 
-$router->get('/account', function () {
-    echo "Page account";
-});
+$router->get('/account', AccountController::class . '@index');
 
 $router->get('/profile', function () {
     echo "Page profile";

@@ -105,4 +105,20 @@ class Product extends Model
 			die($e->getMessage());
 		}
 	}
+
+	public function getBySlug($slug)
+	{
+		try {
+			return $this->queryBuilder
+				->select('p.id as p_id', 'p.name as p_name', 'p.slug as p_slug', 'p.image as p_image', 'p.price', 'p.price_offer', 'p.quantity', 'p.sku', 'p.status', 'p.type', 'p.created_at', 'p.updated_at', 'c.id as c_id', 'c.name as c_name')
+				->from($this->tableName, 'p')
+				->innerJoin('p', 'categories', 'c', 'c.id = p.category_id')
+				->where("p.slug = :slug")
+				->setParameter("slug", $slug)
+				->orderBy('p.id', 'DESC')
+				->fetchAssociative();
+		} catch (\Exception $e) {
+			die($e->getMessage());
+		}
+	}
 }

@@ -96,11 +96,11 @@
         </div>
         <div class="row small-gutters">
 
-            @php
-                echo "<pre>";
-                print_r($productTop8);
-                echo "</pre>";
-            @endphp
+{{--            @php--}}
+{{--                echo "<pre>";--}}
+{{--                print_r($productTop8);--}}
+{{--                echo "</pre>";--}}
+{{--            @endphp--}}
 
             @foreach($productTop8 as $product)
                 {{--                Type: off / new / hot--}}
@@ -115,7 +115,7 @@
                             @if($product['type'] == 1)
                                 <span class="ribbon off">-20%</span>
                             @endif
-                            <a href="{{ routeClient('shop/' . $product['p_id']) }}">
+                            <a href="{{ routeClient("shop/{$product['p_slug']}") }}">
                                 <img class="img-fluid lazy" src="{{ routeClient($image[0]) }}"
                                      data-src="{{ routeClient($image[0]) }}" alt="">
                                 <img class="img-fluid lazy" src="{{ routeClient($image[0]) }}"
@@ -132,7 +132,7 @@
                             <i class="icon-star voted"></i>
                             <i class="icon-star"></i>
                         </div>
-                        <a href="{{ routeClient('shops/' . $product['p_id']) }}">
+                        <a href="{{ routeClient("shop/{$product['p_slug']}") }}">
                             <h3>{{ $product['p_name'] }}</h3>
                         </a>
                         <div class="price_box">

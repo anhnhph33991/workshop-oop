@@ -1,9 +1,22 @@
-@php use LuxChill\Models\Category; @endphp
+@php
+    use LuxChill\Models\Cart;use LuxChill\Models\CartDetail;use LuxChill\Models\Category;
+@endphp
 @php
 
     $category = new Category();
     $categories = $category->getAll('*');
 
+	$carts = new Cart();
+	$cartDetail = new CartDetail();
+	
+	if(isset($_SESSION['user'])){
+	$dataCart = $carts->findByUserId($_SESSION['user']['id']);
+    $countCart = $cartDetail->getCount($dataCart['id']);
+	}elseif (isset($_SESSION['cart'])){
+	$countCart = count($_SESSION['cart']);
+	}else{
+		$countCart = 0;
+	}
 @endphp
 
 <div class="main_nav Sticky">
@@ -49,7 +62,7 @@
                     <li>
                         <div class="dropdown dropdown-cart">
                             <a href="{{ routeClient('cart') }}" class="cart_bt">
-                                <strong>2</strong>
+                                <strong class="count_cart">{{ $countCart }}</strong>
                             </a>
                             <div class="dropdown-menu">
                                 <ul>
@@ -113,6 +126,14 @@
                                         <li>
                                             <a href="{{ routeClient('profile') }}"><i class="ti-user"></i>My Profile</a>
                                         </li>
+                                        @if($_SESSION['user']['role'] == 1)
+                                            <li>
+                                                <a href="{{ routeAdmin() }}">
+                                                    <i class="ri-admin-line" style="margin-top: -5px"></i>
+                                                    Admin
+                                                </a>
+                                            </li>
+                                        @endif
                                         <li>
                                             <a href="{{ routeClient('logout') }}">
                                                 <i class="ri-logout-box-r-line" style="margin-top: -5px"></i>

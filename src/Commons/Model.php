@@ -29,6 +29,11 @@ class Model
 		$this->queryBuilder = $this->connect->createQueryBuilder();
 	}
 
+	public function getConnect()
+	{
+		return $this->connect;
+	}
+
 	public function getAll(...$columns)
 	{
 		try {

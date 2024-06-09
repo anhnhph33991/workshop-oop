@@ -3,6 +3,8 @@
 namespace LuxChill\Controllers\Client;
 
 use LuxChill\Commons\Controller;
+use LuxChill\Models\Cart;
+use LuxChill\Models\CartDetail;
 use LuxChill\Models\Category;
 use LuxChill\Models\Product;
 
@@ -10,10 +12,15 @@ class ShopController extends Controller
 {
 	private Product $product;
 	private Category $categories;
+	private CartDetail $cartDetail;
+	private Cart $cart;
+
 	public function __construct()
 	{
 		$this->product = new Product();
 		$this->categories = new Category();
+		$this->cartDetail = new CartDetail();
+		$this->cart = new Cart();
 	}
 
 	public function index()
@@ -23,25 +30,13 @@ class ShopController extends Controller
 		$page = $_GET['p'] ?? 1;
 		$categories = $this->categories->getAll('*');
 
-//		$url = 'shops?p=';
-//		[$products, $totalPage] = $this->product->paginate($page, 1);
-//
-//		if(isset($category) && isset($cateId)){
-//			$url = "shops?c={$category}&id={$cateId}&p=";
-//			[$products, $totalPage] = $this->product->paginateCategory($cateId,$page);
-//		}
-
-		if(isset($category) && isset($cateId)){
+		if (isset($category) && isset($cateId)) {
 			$url = "shops?c={$category}&id={$cateId}&p=";
-			[$products, $totalPage] = $this->product->paginateCategory($cateId,$page, 1);
-		}else{
+			[$products, $totalPage] = $this->product->paginateCategory($cateId, $page, 1);
+		} else {
 			$url = 'shops?p=';
 			[$products, $totalPage] = $this->product->paginate($page, 2, 1);
 		}
-		
-//		echo "<pre>";
-//		print_r($products);
-//		echo "</pre>";
 
 		$data = [
 			'products' => $products,
@@ -55,12 +50,14 @@ class ShopController extends Controller
 		return $this->renderClient('shop', $data);
 	}
 
-	public function detail($id)
+	public function detail($slug)
 	{
-		$product = $this->product->getOne($id);
+		$product = $this->product->getBySlug($slug);
+
 		$data = [
-			'product' => $product
+			'product' => $product,
+			'images' => explode(',', $product['p_image'])
 		];
-		return $this->renderClient('productDetail');
+		return $this->renderClient('productDetail', $data);
 	}
 }

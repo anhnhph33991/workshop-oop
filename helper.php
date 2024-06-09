@@ -266,14 +266,35 @@ if (!function_exists('formatStrlen')) {
 	}
 }
 
+if (!function_exists('reduce_price')) {
+	function reduce_price($data)
+	{
+		return array_reduce($data, function($total, $items){
+			return $total + (($items['price_offer'] ?: $items['price']) * $items['quantity']);
+		}, 0);
+	}
+}
+
 // slug
 if (!function_exists('createSlug')) {
 	function createSlug($string)
 	{
+//		$string = removeAccents($string);
+//		$string = preg_replace('/\s+/', '-', $string);
+//		$string = strtolower($string);
+//		return $string . '-' . time();
+
 		$string = removeAccents($string);
+		// Thay thế các ký tự không phải là chữ cái hoặc số bằng dấu gạch ngang
+		$string = preg_replace('/[^a-zA-Z0-9\s]/', ' ', $string);
+		// Thay thế nhiều khoảng trắng liên tiếp bằng một khoảng trắng
+		$string = preg_replace('/\s+/', ' ', $string);
+		// Thay thế khoảng trắng bằng dấu gạch ngang
 		$string = preg_replace('/\s+/', '-', $string);
+		// Chuyển tất cả các ký tự thành chữ thường
 		$string = strtolower($string);
-		return $string;
+		// Thêm thời gian hiện tại vào cuối slug
+		return  $string . '-' . time();
 	}
 }
 
