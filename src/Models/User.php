@@ -47,5 +47,15 @@ class User extends Model
 		}
 	}
 
+	public function getByEmail($email)
+	{
+		return $this->queryBuilder
+			->select('*')
+			->from($this->tableName)
+			->where('email = ?')
+			->setParameter(0, $email)
+			->fetchAssociative();
+	}
+
 
 }

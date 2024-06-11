@@ -38,3 +38,13 @@
 
 <!-- YOUR CUSTOM CSS -->
 <link href="{{ asset('client/css/custom.css') }}" rel="stylesheet">
+
+{{-- Toastr --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link href="
+ https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
+ " rel="stylesheet">
+
+<!-- Jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>

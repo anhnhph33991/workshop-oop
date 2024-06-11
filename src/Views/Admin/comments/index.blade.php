@@ -79,199 +79,75 @@
                                             <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
                                         </div>
                                     </th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Author</th>
+                                    <th>Id</th>
+                                    <th>Content</th>
+                                    <th>User</th>
                                     <th>Created At</th>
-                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                class="custom-control-input" id="checkbox-2">
-                                            <label for="checkbox-2" class="custom-control-label">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>Laravel 5 Tutorial: Introduction
-                                        <div class="table-links">
-                                            <a href="#">View</a>
-                                            <div class="bullet"></div>
-                                            <a href="#">Edit</a>
-                                            <div class="bullet"></div>
-                                            <a href="#" class="text-danger">Trash</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="#">Web Developer</a>,
-                                        <a href="#">Tutorial</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle"
-                                                width="35" data-toggle="title" title="">
-                                            <div class="d-inline-block ml-1">Rizal Fakhri</div>
-                                        </a>
-                                    </td>
-                                    <td>2018-01-20</td>
-                                    <td>
-                                        <div class="badge badge-primary">Published</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                class="custom-control-input" id="checkbox-3">
-                                            <label for="checkbox-3" class="custom-control-label">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>Laravel 5 Tutorial: Installing
-                                        <div class="table-links">
-                                            <a href="#">View</a>
-                                            <div class="bullet"></div>
-                                            <a href="#">Edit</a>
-                                            <div class="bullet"></div>
-                                            <a href="#" class="text-danger">Trash</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="#">Web Developer</a>,
-                                        <a href="#">Tutorial</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle"
-                                                width="35" data-toggle="title" title="">
-                                            <div class="d-inline-block ml-1">Rizal Fakhri</div>
-                                        </a>
-                                    </td>
-                                    <td>2018-01-20</td>
-                                    <td>
-                                        <div class="badge badge-primary">Published</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                class="custom-control-input" id="checkbox-4">
-                                            <label for="checkbox-4" class="custom-control-label">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>Laravel 5 Tutorial: MVC
-                                        <div class="table-links">
-                                            <a href="#">View</a>
-                                            <div class="bullet"></div>
-                                            <a href="#">Edit</a>
-                                            <div class="bullet"></div>
-                                            <a href="#" class="text-danger">Trash</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="#">Web Developer</a>,
-                                        <a href="#">Tutorial</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle"
-                                                width="35" data-toggle="title" title="">
-                                            <div class="d-inline-block ml-1">Rizal Fakhri</div>
-                                        </a>
-                                    </td>
-                                    <td>2018-01-20</td>
-                                    <td>
-                                        <div class="badge badge-primary">Published</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                class="custom-control-input" id="checkbox-5">
-                                            <label for="checkbox-5" class="custom-control-label">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>Laravel 5 Tutorial: CRUD
-                                        <div class="table-links">
-                                            <a href="#">View</a>
-                                            <div class="bullet"></div>
-                                            <a href="#">Edit</a>
-                                            <div class="bullet"></div>
-                                            <a href="#" class="text-danger">Trash</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="#">Web Developer</a>,
-                                        <a href="#">Tutorial</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle"
-                                                width="35" data-toggle="title" title="">
-                                            <div class="d-inline-block ml-1">Rizal Fakhri</div>
-                                        </a>
-                                    </td>
-                                    <td>2018-01-20</td>
-                                    <td>
-                                        <div class="badge badge-danger">Draft</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                class="custom-control-input" id="checkbox-1">
-                                            <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>Laravel 5 Tutorial: Deployment
-                                        <div class="table-links">
-                                            <a href="#">View</a>
-                                            <div class="bullet"></div>
-                                            <a href="#">Edit</a>
-                                            <div class="bullet"></div>
-                                            <a href="#" class="text-danger">Trash</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="#">Web Developer</a>,
-                                        <a href="#">Tutorial</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle"
-                                                width="35" data-toggle="title" title="">
-                                            <div class="d-inline-block ml-1">Rizal Fakhri</div>
-                                        </a>
-                                    </td>
-                                    <td>2018-01-20</td>
-                                    <td>
-                                        <div class="badge badge-warning">Pending</div>
-                                    </td>
-                                </tr>
+                                @foreach($comments as $comment)
+                                    <tr>
+                                        <td>
+                                            <div class="custom-checkbox custom-control">
+                                                <input type="checkbox" data-checkboxes="mygroup"
+                                                       class="custom-control-input" id="checkbox-2">
+                                                <label for="checkbox-2" class="custom-control-label">&nbsp;</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{ $comment['id'] }}
+                                        </td>
+                                        <td>
+                                            {{ $comment['content'] }}
+                                        </td>
+                                        <td>
+                                            <a href="#">
+                                                <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle"
+                                                     width="35" data-toggle="title" title="">
+                                                <div class="d-inline-block ml-1">Rizal Fakhri</div>
+                                            </a>
+                                        </td>
+                                        <td>{{ $comment['created_at'] }}</td>
+                                        <td>
+                                            <a href="{{ routeAdmin("comments/" . $comment['id']) }}"
+                                               class="btn btn-secondary"
+                                               data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Show">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                            <a href="{{ routeAdmin('comments/' . $comment['id'] . '/edit') }}"
+                                               class="btn btn-warning" data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Edit">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{{ routeAdmin('comments/' . $comment['id'] . '/delete') }}"
+                                               class="btn btn-danger"
+                                               onclick="return confirm('Bạn có chắc muốn xóa: {{ $comment['id'] }} ?')"
+                                               data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Delete">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </table>
                         </div>
                         <div class="float-right">
                             <nav>
                                 <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Previous">
+                                    <li class="page-item {{ $page == 1 ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ prevPage('comments', $page) }}" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                             <span class="sr-only">Previous</span>
                                         </a>
                                     </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
+                                    @for($i = 1; $i <= $totalPage; $i++)
+                                        <li class="page-item {{ $i == $page ? 'active' : '' }}">
+                                            <a class="page-link" href="{{ routeAdmin('comments?page=' . $i) }}">{{ $i }}</a>
+                                        </li>
+                                    @endfor
+                                    <li class="page-item {{ $page == $totalPage ? "disabled" : "" }}">
+                                        <a class="page-link" href="{{ nextPage('comments', $page, $totalPage) }}" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                             <span class="sr-only">Next</span>
                                         </a>

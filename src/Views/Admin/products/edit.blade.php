@@ -20,7 +20,7 @@
                 On this page you can edit a new Product and fill in all fields.
             </p>
 
-            <form class="row" action="{{ routeAdmin('products/store') }}" method="post" enctype="multipart/form-data">
+            <form class="row" action="{{ routeAdmin('products/' . $product['p_id'] . '/update') }}" method="post" enctype="multipart/form-data">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -30,12 +30,13 @@
                             @php
                                 $images = explode(',', $product['p_image']);
 
-                                echo "<pre>";
-                                print_r($images);
+//                                echo "<pre>";
+//                                print_r($images);
+//                                echo "</pre>";
+//								echo "</br>";
+								echo "<pre>";
+                                print_r($product);
                                 echo "</pre>";
-    //                            echo "<pre>";
-    //                            print_r($product);
-    //                            echo "</pre>";
                             @endphp
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Name</label>
@@ -106,15 +107,15 @@
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Image
                                     Current</label>
                                 <div class="col-sm-12 col-md-3 d-flex">
-                                    @foreach($images as $image)
-                                        <div class="gallery">
+                                    <div class="gallery">
+                                        @foreach($images as $image)
                                             <div class="gallery-item" data-image="{{ routeClient($image) }}"
                                                  data-title="{{ $product['p_name'] }}">
                                                 <img src="{{ routeClient($image) }}" alt="{{ $product['p_name'] }}"
                                                      style="width: 100%; height: 60px;">
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
 
@@ -122,6 +123,13 @@
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Category</label>
                                 <div class="col-sm-12 col-md-7">
                                     <select class="form-control selectric" name="category">
+                                        <option
+                                                value="{{ $product['c_id'] }}"
+                                                selected
+                                                disabled
+                                        >
+                                            {{ $product['c_name'] }}
+                                        </option>
                                         @foreach($categories as $category)
                                             <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
                                         @endforeach
@@ -132,7 +140,13 @@
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Type</label>
                                 <div class="col-sm-12 col-md-7">
                                     <select class="form-control selectric" name="type">
-                                        <option value="0" selected>No Sale</option>
+                                        <option value="{{ $product['type'] }}"
+                                                selected
+                                                disabled
+                                        >
+                                            {{ $product['type'] == 1 ? 'Sale' : 'No Sale' }}
+                                        </option>
+                                        <option value="0">No Sale</option>
                                         <option value="1">Sale</option>
                                     </select>
                                 </div>
@@ -141,7 +155,14 @@
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Status</label>
                                 <div class="col-sm-12 col-md-7">
                                     <select class="form-control selectric" name="status">
-                                        <option value="1" selected>Publish</option>
+                                        <option
+                                                value="{{ $product['status'] }}"
+                                                selected
+                                                disabled
+                                        >
+                                            {{ $product['status'] == 1 ? 'Publish' : 'Draft' }}
+                                        </option>
+                                        <option value="1">Publish</option>
                                         <option value="0">Draft</option>
                                     </select>
                                 </div>

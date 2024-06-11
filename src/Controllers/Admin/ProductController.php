@@ -32,7 +32,7 @@ class ProductController extends Controller implements InterfaceCrudController
 	public function index()
 	{
 		$page = $_GET['page'] ?? 1;
-		[$products, $totalPage] = $this->product->paginate($page, 1);
+		[$products, $totalPage] = $this->product->paginate($page);
 
 //		echo "<pre>";
 //		print_r($products);
@@ -101,21 +101,88 @@ class ProductController extends Controller implements InterfaceCrudController
 
 	public function edit($id)
 	{
+		$product = $this->product->getOne($id);
+//		$category = $this->category->getOne($product['c_id']);
+
 		$data = [
 			'categories' => $this->category->getAll("*"),
-			'product' => $this->product->getOne($id)
+			'product' => $product,
+//			'category' => $category
 		];
 		return $this->renderAdmin($this->folder . __FUNCTION__, $data);
 	}
 
 	public function update($id)
 	{
+		$product = $this->product->getOne($id);
+		$_POST['price'] = preg_replace('/[^\d]/', '', $_POST['price']);
 
+		$validation = $this->validator->make($_POST + $_FILES, [
+			'name' => 'required',
+			'price' => 'required|numeric',
+			'quantity' => 'required|numeric',
+			'images' => 'image_format',
+		]);
+
+		$validation->validate();
+
+		if ($validation->fails()) {
+			$errors = $validation->errors()->firstOfAll();
+			echo "<pre>";
+			print_r($errors);
+			echo "</pre>";
+		} else {
+			$images = isValidateMultipleImage($_FILES['images']) ? upload_multifile($_FILES['images']) : $product['p_image'];
+
+			$data = [
+				'name' => $_POST['name'],
+				'price' => $product['price'],
+				'quantity' => $_POST['quantity'],
+				'image' => $images,
+				'category_id' => $_POST['category'] ?? $product['c_id'],
+				'type' => $_POST['type'] ?? $product['type'],
+				'status' => $_POST['status'] ?? $product['status'],
+				'updated_at' => getDateTime()
+			];
+
+			// Nếu type == 1 <==> sale. Tự động giảm 20%
+			if ($_POST['type'] == 1) {
+				$data['price_offer'] = handleSalePrice($_POST['price']);
+			}else{
+				$data['price_offer'] = 0;
+			}
+			
+			$this->product->update($id, $data);
+
+			if ($images != $product['p_image']) {
+				$expImages = explode(',', $product['p_image']);
+				foreach ($expImages as $image) {
+					if (file_exists($image)) {
+						unlink($image);
+					}
+				}
+			}
+			setToastr('Update product success', 'success');
+			header('location: ' . routeAdmin("products/$id/edit"));
+		}
 	}
 
 	public function delete($id)
 	{
+		$product = $this->product->getOne($id);
+		$this->product->delete($id);
 
+		if ($product['p_image']) {
+			$expImages = explode(',', $product['p_image']);
+			foreach ($expImages as $image) {
+				if (file_exists($image)) {
+					unlink($image);
+				}
+			}
+		}
+
+		setToastr('Delete product success', 'success');
+		header('location: ' . routeAdmin('products'));
 	}
 
 	public function setMessagesValidate()

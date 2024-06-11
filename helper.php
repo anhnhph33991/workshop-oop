@@ -106,11 +106,12 @@ if (!function_exists('upload_multifile')) {
 }
 
 
-if(!function_exists('validateImage')){
-	function validateImage($image){
-		if(!$image['error'][0] == UPLOAD_ERR_NO_FILE){
+if (!function_exists('validateImage')) {
+	function validateImage($image)
+	{
+		if (!$image['error'][0] == UPLOAD_ERR_NO_FILE) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -167,6 +168,46 @@ if (!function_exists('middleware_auth')) {
 	}
 }
 
+if (!function_exists('middleware_login')) {
+	function middleware_login($password, $user)
+	{
+//		$check = password_verify($password, $user['password']);
+
+//		echo "<pre>";
+//		var_dump($check);
+//		echo "</pre>";
+
+
+		if (password_verify($password, $user['password'])) {
+			$_SESSION['user'] = $user;
+			if ($user['role'] == 1) {
+				setToastr('Dang Nhap Thanh Cong', 'success');
+				header('location: ' . routeAdmin());
+				exit();
+			} else {
+				setToastr('Dang Nhap Thanh Cong', 'success');
+				header('location: ' . routeClient());
+				exit();
+			}
+//			echo "success";
+		} else {
+			$_SESSION['errors']['password'] = 'Password k chinh xac';
+			header('location: ' . routeClient('login'));
+			echo "failed";
+		}
+	}
+}
+
+if (!function_exists('middleware_user_auth')) {
+	function middleware_user_auth()
+	{
+		if (isset($_SESSION['user'])) {
+			header('location: ' . routeClient());
+			exit();
+		}
+	}
+}
+
 if (!function_exists('active_account')) {
 	function active_account()
 	{
@@ -185,7 +226,7 @@ if (!function_exists('prevPage')) {
 if (!function_exists('nextPage')) {
 	function nextPage($uri, $page, $totalPage)
 	{
-		return routeAdmin( $uri .'?page=' . ($page == $totalPage ? $page : $page + 1));
+		return routeAdmin($uri . '?page=' . ($page == $totalPage ? $page : $page + 1));
 	}
 }
 
@@ -204,14 +245,137 @@ if (!function_exists('formatPrice')) {
 	}
 }
 
+if (!function_exists('isValidateMultipleImage')) {
+	function isValidateMultipleImage($files)
+	{
+		$check = false;
+		foreach ($files['error'] as $file) {
+			if ($file != UPLOAD_ERR_NO_FILE) {
+				$check = true;
+				break;
+			}
+		}
+		return $check;
+	}
+}
+
+if (!function_exists('formatStrlen')) {
+	function formatStrlen($string, $max, $length)
+	{
+		return strlen($string) > $max ? substr($string, 0, $length) . '...' : $string;
+	}
+}
+
+if (!function_exists('reduce_price')) {
+	function reduce_price($data)
+	{
+		return array_reduce($data, function($total, $items){
+			return $total + (($items['price_offer'] ?: $items['price']) * $items['quantity']);
+		}, 0);
+	}
+}
+
+// momo
+
+if(!function_exists('execPostRequest')){
+	function execPostRequest($url, $data)
+	{
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($data))
+		);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+		//execute post
+		$result = curl_exec($ch);
+		//close connection
+		curl_close($ch);
+		return $result;
+	}
+}
+
+if(!function_exists('momo')){
+	function momo($price)
+	{
+		$endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+
+
+		$partnerCode = 'MOMOBKUN20180529';
+		$accessKey = 'klm05TvNBzhg7h7j';
+		$secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+		$orderInfo = "Thanh toán qua MoMo";
+		$amount = $price;
+		$orderId = rand(00, 9999);
+		$redirectUrl = "http://localhost/workshop-oop/check-out/momo";
+		$ipnUrl = "http://localhost/workshop-oop/check-out/momo";
+		$extraData = "";
+
+		$partnerCode = $partnerCode;
+		$accessKey = $accessKey;
+		$serectkey = $secretKey;
+		$orderId = $orderId; // Mã đơn hàng
+		$orderInfo = $orderInfo;
+		$amount = $amount;
+		$ipnUrl = $ipnUrl;
+		$redirectUrl = $redirectUrl;
+		$extraData = $extraData;
+
+		$requestId = time() . "";
+		$requestType = "payWithATM";
+		// $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+		//before sign HMAC SHA256 signature
+		$rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+		$signature = hash_hmac("sha256", $rawHash, $serectkey);
+		$data = array(
+			'partnerCode' => $partnerCode,
+			'partnerName' => "Test",
+			"storeId" => "MomoTestStore",
+			'requestId' => $requestId,
+			'amount' => $amount,
+			'orderId' => $orderId,
+			'orderInfo' => $orderInfo,
+			'redirectUrl' => $redirectUrl,
+			'ipnUrl' => $ipnUrl,
+			'lang' => 'vi',
+			'extraData' => $extraData,
+			'requestType' => $requestType,
+			'signature' => $signature
+		);
+		$result = execPostRequest($endpoint, json_encode($data));
+		$jsonResult = json_decode($result, true);  // decode json
+
+		//Just a example, please check more in there
+		// setcookie("title_confirm", "Đặt hàng thành công", time() + 1);
+		// setcookie("subTitle_confirm", "Đã gửi mail xác nhận đơn hàng", time() + 1);
+		header('Location: ' . $jsonResult['payUrl']);
+	}
+}
+
+
 // slug
 if (!function_exists('createSlug')) {
 	function createSlug($string)
 	{
+//		$string = removeAccents($string);
+//		$string = preg_replace('/\s+/', '-', $string);
+//		$string = strtolower($string);
+//		return $string . '-' . time();
+
 		$string = removeAccents($string);
+		// Thay thế các ký tự không phải là chữ cái hoặc số bằng dấu gạch ngang
+		$string = preg_replace('/[^a-zA-Z0-9\s]/', ' ', $string);
+		// Thay thế nhiều khoảng trắng liên tiếp bằng một khoảng trắng
+		$string = preg_replace('/\s+/', ' ', $string);
+		// Thay thế khoảng trắng bằng dấu gạch ngang
 		$string = preg_replace('/\s+/', '-', $string);
+		// Chuyển tất cả các ký tự thành chữ thường
 		$string = strtolower($string);
-		return $string;
+		// Thêm thời gian hiện tại vào cuối slug
+		return  $string . '-' . time();
 	}
 }
 
