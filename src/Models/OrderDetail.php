@@ -11,7 +11,8 @@ class OrderDetail extends Model
 
 	public function getAllOrderDetailByProductId($orderId)
 	{
-		return $this->queryBuilder
+		$queryBuilder = clone($this->queryBuilder);
+		return $queryBuilder
 			->select('*')
 			->from($this->tableName)
 			->where('order_id = :orderId')
@@ -37,7 +38,8 @@ class OrderDetail extends Model
 
 	public function getOne($id)
 	{
-		return $this->queryBuilder
+		$queryBuilder = clone($this->queryBuilder);
+		return $queryBuilder
 			->select('*')
 			->from($this->tableName)
 			->where('id = :id')
@@ -47,8 +49,8 @@ class OrderDetail extends Model
 
 	public function getOneOrderDetail($detailId, $productId)
 	{
-//		$queryBuilder = clone($this->queryBuilder);
-		return $this->queryBuilder
+		$queryBuilder = clone($this->queryBuilder);
+		return $queryBuilder
 			->select('od.id as od_id', 'od.order_id as od_order_id', 'od.product_id as od_product_id', 'od.qty as od_qty', 'p.name as p_name', 'p.id as p_id', 'p.image', 'p.price as p_price', 'p.price_offer as p_priceOffer', 'p.sku as p_sku', 'o.status as o_status', 'o.address_shipping as o_addressShipping', 'o.user_name as o_username')
 			->from($this->tableName, 'od')
 			->innerJoin('od', 'products', 'p', 'od.product_id = p.id')
@@ -77,6 +79,26 @@ class OrderDetail extends Model
 				->fetchAllAssociative();
 
 			return [$data, $totalPage];
+		} catch (Exception $e) {
+			die($e->getMessage());
+		}
+	}
+
+	public function findOne($id)
+	{
+		$queryBuilder = clone($this->queryBuilder);
+		try {
+			$data = $queryBuilder
+				->select('od.id as od_id', 'od.order_id as order_id', 'od.product_id as or_productId', 'od.product_name as od_productName', 'od.price as od_price', 'od.price_offer as od_priceOffer', 'od.qty as od_qty', 'o.id as o_id', 'o.status as o_status', 'p.image as p_image')
+				->from($this->tableName, 'od')
+				->innerJoin('od', 'orders', 'o', 'od.order_id = o.id')
+				->innerJoin('od', 'products', 'p', 'od.product_id = p.id')
+				->where('od.id = :id')
+				->setParameter('id', $id)
+				->orderBy('od.id', 'DESC')
+				->fetchAssociative();
+
+			return $data;
 		} catch (Exception $e) {
 			die($e->getMessage());
 		}

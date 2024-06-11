@@ -80,19 +80,46 @@
                                                 <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
                                             </div>
                                         </th>
-                                        <th>Title</th>
-                                        <th>Category</th>
-                                        <th>Author</th>
-                                        <th>Created At</th>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>SubTotal</th>
                                         <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
 
                                     @foreach($orders as $order)
                                         @php
-                                            echo "<pre>";
-                                            print_r($orders);
-                                            echo "</pre>";
                                             $images = explode(',', $order['p_image']);
+//											echo "<pre>";
+//											print_r($order);
+//											echo "</pre>";
+
+											switch ($order['o_status']){
+                                case "0":
+                                    $status = "Cho Xac Nhan";
+									$css = "";
+                                    break;
+                                    case "1":
+                                        $status = "Da Xac Nhan";
+                                    break;
+                                    case "2":
+                                        $status = "Dang Chuan Bi Hang";
+                                    break;
+                                    case "3":
+                                        $status = "Dang Giao Hang";
+                                    break;
+                                    case "4":
+                                        $status = "Da Giao Hang";
+                                    break;
+                                    case "5":
+                                        $status = "Da Huy";
+                                    break;
+                                    case "6":
+                                        $status = "Hoan Hang";
+                                    break;
+
+                            }
+
                                         @endphp
                                         <tr>
                                             <td>
@@ -105,62 +132,78 @@
                                             <td>
                                                 <div class="gallery">
                                                     <div class="gallery-item"
-                                                         data-image="{{ routeClient($image[0]) }}"
+                                                         data-image="{{ routeClient($images[0]) }}"
                                                          data-title="{{ $order['od_productName'] }}">
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <a href="#">Web Developer</a>,
-                                                <a href="#">Tutorial</a>
+                                                {{ $order['od_productName'] }}
                                             </td>
                                             <td>
-                                                <a href="#">
-                                                    <img alt="image" src="{{ routeClient($image[0]) }}"
-                                                         class="rounded-circle"
-                                                         width="35" data-toggle="title" title="">
-                                                    <div class="d-inline-block ml-1">Rizal Fakhri</div>
+                                                {{ number_format(($order['od_priceOffer'] ?: $order['od_price']) * $order['od_qty']) }}
+                                            </td>
+                                            <td>
+                                                <div class="badge badge-primary">
+                                                    {{ $status }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{--                                                <div class="badge badge-primary">Published</div>--}}
+                                                <a href="{{ routeAdmin("orders/" . $order['od_id']) }}"
+                                                   class="btn btn-secondary"
+                                                   data-toggle="tooltip" data-placement="bottom"
+                                                   data-original-title="Show">
+                                                    <i class="fa-regular fa-eye"></i>
                                                 </a>
-                                            </td>
-                                            <td>2018-01-20</td>
-                                            <td>
-                                                <div class="badge badge-primary">Published</div>
+                                                <a href="{{ routeAdmin('orders/' . $order['od_id'] . '/edit') }}"
+                                                   class="btn btn-warning" data-toggle="tooltip" data-placement="bottom"
+                                                   data-original-title="Edit">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                                <a href="{{ routeAdmin('orders/' . $order['od_id'] . '/delete') }}"
+                                                   class="btn btn-danger"
+                                                   onclick="return confirm('Bạn có chắc muốn xóa: {{ $order['od_productName'] }} ?')"
+                                                   data-toggle="tooltip" data-placement="bottom"
+                                                   data-original-title="Delete">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
-                            </table>
-                        </div>
-                        <div class="float-right">
-                            <nav>
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                                </table>
+                            </div>
+                            <div class="float-right">
+                                <nav>
+                                    <ul class="pagination">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">1</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">2</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">3</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 @endsection
