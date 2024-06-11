@@ -25,16 +25,22 @@
                         <div class="card-body">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#">All <span class="badge badge-white">5</span></a>
+                                    <a class="nav-link active" href="{{ routeAdmin('users') }}">
+                                        All
+                                        <span class="badge badge-white">5</span>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Draft <span class="badge badge-primary">1</span></a>
+                                    <a class="nav-link" href="{{ routeAdmin('users?a=1') }}">
+                                        Active
+                                        <span class="badge badge-primary">1</span>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Pending <span class="badge badge-primary">1</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Trash <span class="badge badge-primary">0</span></a>
+                                    <a class="nav-link" href="{{ routeAdmin('users?a=0') }}">
+                                        IsActive
+                                        <span class="badge badge-primary">1</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -100,19 +106,19 @@
                                             <td>
                                                 <div class="gallery">
                                                     <div class="gallery-item"
-                                                         data-image="{{ routeClient($user['image']) }}"
+                                                         data-image="{{ routeClient($user['image'] ?? 'assets/uploads/avatar.jpg') }}"
                                                          data-title="{{ $user['username'] }}">
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                {{ $user['username'] }}
+                                                {{ $user['username'] ?? 'No Data' }}
                                             </td>
                                             <td>
-                                                {{ $user['email'] }}
+                                                {{ $user['email'] ?? "No Data" }}
                                             </td>
                                             <td>
-                                                {{ $user['address'] }}
+                                                {{ $user['address'] ?? "No Data" }}
                                             </td>
                                             <td>
                                                 <div class="badge

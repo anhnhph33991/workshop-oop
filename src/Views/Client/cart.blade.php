@@ -2,7 +2,7 @@
 @section('title', 'Carts')
 
 @section('main')
-    <main class="bg_gray">
+    <main class="bg_gray min-vh-100">
         <div class="container margin_30">
             <div class="page_header">
                 <div class="breadcrumbs">
@@ -108,25 +108,27 @@
         </div>
         <!-- /container -->
 
-        <div class="box_cart">
-            <div class="container">
-                <div class="row justify-content-end">
-                    <div class="col-xl-4 col-lg-4 col-md-6">
-                        <ul>
-                            <li class="price-total" data-PriceTotal="{{ reduce_price($carts) }}">
-                                <span>Total</span>
-                                @if(!empty($carts))
-                                    {{ number_format(reduce_price($carts)) }}đ
-                                @else
-                                    0đ
-                                @endif
-                            </li>
-                        </ul>
-                        <a href="{{ routeClient('check-out') }}" class="btn_1 full-width cart">Checkout</a>
+        @if(!empty($carts))
+            <div class="box_cart">
+                <div class="container">
+                    <div class="row justify-content-end">
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <ul>
+                                <li class="price-total" data-PriceTotal="{{ reduce_price($carts) }}">
+                                    <span>Total</span>
+                                    @if(!empty($carts))
+                                        {{ number_format(reduce_price($carts)) }}đ
+                                    @else
+                                        0đ
+                                    @endif
+                                </li>
+                            </ul>
+                            <a href="{{ routeClient('check-out') }}" class="btn_1 full-width cart">Checkout</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
         <!-- /box_cart -->
 
     </main>

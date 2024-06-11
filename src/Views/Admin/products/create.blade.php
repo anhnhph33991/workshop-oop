@@ -37,7 +37,7 @@
                                            name="name"
                                     >
                                     @isset($_SESSION['errors']['name'])
-                                        <div class="invalid-feedback">
+                                        <div class="text-danger">
                                             {{ $_SESSION['errors']['name'] }}
                                         </div>
                                     @endisset

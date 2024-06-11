@@ -98,7 +98,7 @@
                                     Current</label>
                                 <div class="col-sm-12 col-md-7">
                                     <div class="gallery">
-                                        <div class="gallery-item" data-image="{{ routeClient($user['image']) }}"
+                                        <div class="gallery-item" data-image="{{ routeClient($user['image'] ?? 'assets/uploads/avatar.jpg') }}"
                                              data-title="{{ $user['username'] }}" style="width: 250px; height: 250px;">
                                         </div>
                                     </div>

@@ -21,4 +21,17 @@ class Cart extends Model
 			die($e->getMessage());
 		}
 	}
+
+	public function deleteByUserId($id)
+	{
+		try {
+			return $this->queryBuilder
+				->delete($this->tableName)
+				->where('user_id = :id')
+				->setParameter('id', $id)
+				->executeQuery();
+		}catch (\Exception $e){
+			die($e->getMessage());
+		}
+	}
 }

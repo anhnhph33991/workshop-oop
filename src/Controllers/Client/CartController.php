@@ -22,14 +22,26 @@ class CartController extends Controller
 
 	public function index()
 	{
-		if(isset($_SESSION['user'])){
+		if (isset($_SESSION['user'])) {
 			$dataCart = $this->cart->findByUserId($_SESSION['user']['id']);
-			$carts = $this->cartDetail->selectInnerJoinProduct($dataCart['id']);
-		}else{
-			if(isset($_SESSION['cart'])){
+//			$carts = $this->cartDetail->selectInnerJoinProduct($dataCart['id']);
+
+			if (!empty($dataCart)) {
+				$carts = $this->cartDetail->selectInnerJoinProduct($dataCart['id']);
+			} else {
+				$carts = [];
+			}
+		} else {
+			if (isset($_SESSION['cart'])) {
 				$carts = $_SESSION['cart'];
+			} else {
+				$carts = [];
 			}
 		}
+
+//		echo "<pre>";
+//		print_r($carts);
+//		echo "</pre>";
 
 		$data = [
 			'carts' => $carts
@@ -42,19 +54,6 @@ class CartController extends Controller
 		$qtyUpdate = 0;
 		$countCart = 0;
 
-		/*	Table carts
-  			- user_id
-			- created_at
-			- updated_at
-
-			Table cart_details
-			- cart_id
-			- product_id
-			- quantity
-		*/
-
-
-
 		if ($_POST) {
 
 			$product_id = $_POST['productId'];
@@ -62,7 +61,7 @@ class CartController extends Controller
 			$user_id = $_SESSION['user']['id'] ?? 0;
 
 			if ($user_id == 0) {
-				if(!isset($_SESSION['cart'])){
+				if (!isset($_SESSION['cart'])) {
 					$_SESSION['cart'] = [];
 					$message = "create session cart success";
 				}
@@ -72,24 +71,25 @@ class CartController extends Controller
 				$dataProduct = [
 					'c_id' => 1,
 					'cart_id' => 2,
+					'p_id' => $product_id,
 					'quantity' => $product_qty,
 					'name' => $products['p_name'],
 					'slug' => $products['p_slug'],
 					'image' => $products['p_image'],
-					'category_id' =>  $products['c_id'],
-					'price' =>  $products['price'],
-					'price_offer' =>  $products['price_offer'],
-					'p_quantity' =>  $products['quantity'],
-					'sku' =>  $products['sku'],
-					'status' =>  $products['status'],
-					'type' =>  $products['type'],
+					'category_id' => $products['c_id'],
+					'price' => $products['price'],
+					'price_offer' => $products['price_offer'],
+					'p_quantity' => $products['quantity'],
+					'sku' => $products['sku'],
+					'status' => $products['status'],
+					'type' => $products['type'],
 				];
 
-				if(!isset($_SESSION['cart'][$products['p_id']])){
+				if (!isset($_SESSION['cart'][$products['p_id']])) {
 					$_SESSION['cart'][$product_id] = $dataProduct;
 					$countCart = count($_SESSION['cart']);
 					$message = "Add product to session cart";
-				}else{
+				} else {
 					$_SESSION['cart'][$product_id]['quantity'] += $product_qty;
 					$countCart = count($_SESSION['cart']);
 					$message = "Update qty product";
@@ -97,10 +97,9 @@ class CartController extends Controller
 
 //				$message = 'Create session cart no user';
 
-
 			} else {
 				$connect = $this->cart->getConnect();
-				$connect->beginTransaction();
+//				$connect->beginTransaction();
 
 				try {
 					// get one cart
@@ -118,31 +117,23 @@ class CartController extends Controller
 					$cartId = $checkCart['id'] ?? $connect->lastInsertId();
 					$checkProductCartDetail = $this->cartDetail->findByCartIdAndProductId($cartId, $product_id);
 
-					if(empty($checkProductCartDetail)){
+					if (empty($checkProductCartDetail)) {
 						$this->cartDetail->insert([
 							'cart_id' => $cartId,
 							'product_id' => $product_id,
 							'quantity' => $product_qty
 						]);
-					}else{
+					} else {
 						$qtyUpdate = $checkProductCartDetail['quantity'] + $product_qty;
 						$this->cartDetail->updateByCartIDAndProductID($cartId, $product_id, $qtyUpdate);
 					}
 
-//					if (empty($checkProductCartDetail)) {
-//						$this->cartDetail->insert([
-//							'cart_id' => $cartId,
-//							'product_id' => $product_id,
-//							'quantity' => $product_qty
-//						]);
-//					}
-
 					$countCart = $this->cartDetail->getCount($cartId);
 
 					$message = 'Insert data carts';
-					$connect->commit();
+//					$connect->commit();
 				} catch (\Throwable $e) {
-					$connect->rollBack();
+//					$connect->rollBack();
 					$message = "LuxChill: " . $e->getMessage();
 				}
 			}
@@ -163,11 +154,11 @@ class CartController extends Controller
 	{
 //		echo $id;
 
-		if(isset($_SESSION['user'])){
+		if (isset($_SESSION['user'])) {
 			$this->cartDetail->delete($id);
 			setToastr('Delete success', 'success');
 			header('location: ' . routeClient('cart'));
-		}else{
+		} else {
 			unset($_SESSION['cart'][$id]);
 			setToastr('Delete product success', 'success');
 			header('location: ' . routeClient('cart'));
@@ -176,7 +167,7 @@ class CartController extends Controller
 
 	public function update()
 	{
-		if($_POST){
+		if ($_POST) {
 			$id = $_POST['id'];
 			$quantity = $_POST['quantity'];
 			$price = $_POST['price'];
@@ -186,14 +177,14 @@ class CartController extends Controller
 			$subTotal = 0;
 			$priceTotal = 0;
 
-			if(!empty($_SESSION['user'])){
+			if (!empty($_SESSION['user'])) {
 				$this->cartDetail->updateQty($id, $productId, $quantity);
 				$abc = $this->cartDetail->selectInnerJoinProduct($cartIdReal);
 				$subTotal = $price * $quantity;
-				$priceTotal = array_reduce($abc, function($total, $items){
+				$priceTotal = array_reduce($abc, function ($total, $items) {
 					return $total + (($items['price_offer'] ?: $items['price']) * $items['quantity']);
 				}, 0);
-			}else{
+			} else {
 				$_SESSION['cart'][$id]['quantity'] = $quantity;
 				$subTotal = $price * $quantity;
 				$priceTotal = reduce_price($_SESSION['cart']);

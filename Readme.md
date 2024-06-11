@@ -36,3 +36,14 @@ ImageFormatRule() => 'Rule check định dạng ảnh - 4 kiểu success: jpg, p
 ImageFileRule() => 'Rule check upload ảnh, check nhiều ảnh'
 
 ```
+
+### Status Order:
+```
+0 => Cho Xac Nhan
+1 => Da Xac Nhan
+2 => Dang Chuan Bi Hang
+3 => Dang Giao Hang
+4 => Da Giao Hang
+5 => Da Huy
+6 => Hoan Hang
+```

@@ -6,160 +6,145 @@
         <div class="page_header">
             <div class="breadcrumbs">
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Category</a></li>
-                    <li>Page active</li>
+                    <li><a href="{{ routeClient() }}">Home</a></li>
+                    <li><a href="{{ routeClient('cart') }}">Cart</a></li>
+                    <li>CheckOut</li>
                 </ul>
             </div>
-            <h1>Sign In or Create an Account</h1>
+            <h1>Checkout Cart</h1>
 
         </div>
         <!-- /page_header -->
-        <div class="row">
+        <form action="{{ routeClient('check-out/add') }}" method="post" class="row">
             <div class="col-lg-4 col-md-6">
                 <div class="step first">
                     <h3>1. User Info and Billing address</h3>
-                    <ul class="nav nav-tabs" id="tab_checkout" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1"
-                               role="tab" aria-controls="tab_1" aria-selected="true">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab"
-                               aria-controls="tab_2" aria-selected="false">Login</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content checkout">
-                        <div class="tab-pane fade show active" id="tab_1" role="tabpanel"
-                             aria-labelledby="tab_1">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Password">
-                            </div>
-                            <hr>
-                            <div class="row no-gutters">
-                                <div class="col-6 form-group pr-1">
-                                    <input type="text" class="form-control" placeholder="Name">
-                                </div>
-                                <div class="col-6 form-group pl-1">
-                                    <input type="text" class="form-control" placeholder="Last Name">
-                                </div>
-                            </div>
-                            <!-- /row -->
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Full Address">
-                            </div>
-                            <div class="row no-gutters">
-                                <div class="col-6 form-group pr-1">
-                                    <input type="text" class="form-control" placeholder="City">
-                                </div>
-                                <div class="col-6 form-group pl-1">
-                                    <input type="text" class="form-control" placeholder="Postal code">
-                                </div>
-                            </div>
-                            <!-- /row -->
-                            <div class="row no-gutters">
-                                <div class="col-md-12 form-group">
-                                    <div class="custom-select-form">
-                                        <select class="wide add_bottom_15" name="country" id="country">
-                                            <option value="" selected>Country</option>
-                                            <option value="Europe">Europe</option>
-                                            <option value="United states">United states</option>
-                                            <option value="Asia">Asia</option>
-                                        </select>
+
+                    @if(!empty($_SESSION['user']))
+                        @if(empty($_SESSION['user']['address_ship']))
+                            <ul class="nav nav-tabs" id="tab_checkout" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1"
+                                       role="tab" aria-controls="tab_1" aria-selected="true">Form Address</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content checkout">
+                                <div class="tab-pane fade show active" id="tab_1" role="tabpanel"
+                                     aria-labelledby="tab_1">
+                                    <div class="form-group">
+                                        <input type="email" class="form-control has-validation"
+                                               placeholder="Email"
+                                               name="email"
+                                               value="{{ $_SESSION['user']['email'] ?? '' }}"
+                                        >
+                                        @isset($_SESSION['errors']['email'])
+                                            <div class="invalid-feedback">
+                                                {{ $_SESSION['errors']['email'] }}
+                                            </div>
+                                        @endisset
                                     </div>
-                                </div>
-                            </div>
-                            <!-- /row -->
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Telephone">
-                            </div>
-                            <hr>
-                            <div class="form-group">
-                                <label class="container_check" id="other_addr">Other billing address
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div id="other_addr_c" class="pt-2">
-                                <div class="row no-gutters">
-                                    <div class="col-6 form-group pr-1">
-                                        <input type="text" class="form-control" placeholder="Name">
-                                    </div>
-                                    <div class="col-6 form-group pl-1">
-                                        <input type="text" class="form-control" placeholder="Last Name">
-                                    </div>
-                                </div>
-                                <!-- /row -->
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Full Address">
-                                </div>
-                                <div class="row no-gutters">
-                                    <div class="col-6 form-group pr-1">
-                                        <input type="text" class="form-control" placeholder="City">
-                                    </div>
-                                    <div class="col-6 form-group pl-1">
-                                        <input type="text" class="form-control" placeholder="Postal code">
-                                    </div>
-                                </div>
-                                <!-- /row -->
-                                <div class="row no-gutters">
-                                    <div class="col-md-12 form-group">
-                                        <div class="custom-select-form">
-                                            <select class="wide add_bottom_15" name="country" id="country_2">
-                                                <option value="" selected>Country</option>
-                                                <option value="Europe">Europe</option>
-                                                <option value="United states">United states</option>
-                                                <option value="Asia">Asia</option>
-                                            </select>
+                                    <hr>
+                                    <div class="row no-gutters">
+                                        <div class="col-6 form-group pr-1">
+                                            <input type="text"
+                                                   class="form-control {{ isInvalid($_SESSION['errors']['username'] ?? null) }}"
+                                                   placeholder="UserName"
+                                                   name="username"
+                                                   value="{{ $_SESSION['user']['username'] ?? '' }}"
+                                            >
+                                            @isset($_SESSION['errors']['username'])
+                                                <div class="invalid-feedback">
+                                                    {{ $_SESSION['errors']['username'] }}
+                                                </div>
+                                            @endisset
+                                        </div>
+                                        <div class="col-6 form-group pl-1">
+                                            <input type="tel"
+                                                   class="form-control {{ isInvalid($_SESSION['errors']['phone'] ?? null) }}"
+                                                   placeholder="Phone" name="phone"
+                                                   value="{{ $_SESSION['user']['phone'] ?? '' }}"
+                                            >
+                                            @isset($_SESSION['errors']['phone'])
+                                                <div class="invalid-feedback">
+                                                    {{ $_SESSION['errors']['phone'] }}
+                                                </div>
+                                            @endisset
                                         </div>
                                     </div>
+                                    <!-- /row -->
+                                    <div class="form-group">
+                                        <input type="text"
+                                               class="form-control {{ isInvalid($_SESSION['errors']['address_shipping'] ?? null) }}"
+                                               placeholder="Full Address"
+                                               name="address_shipping">
+                                        @isset($_SESSION['errors']['address_shipping'])
+                                            <div class="invalid-feedback">
+                                                {{ $_SESSION['errors']['address_shipping'] }}
+                                            </div>
+                                        @endisset
+                                    </div>
+                                </div>
+                                <!-- /tab_1 -->
+                            </div>
+                        @else
+                            <h1>Co Address</h1>
+                        @endif
+                    @else
+                        <ul class="nav nav-tabs" id="tab_checkout" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1"
+                                   role="tab" aria-controls="tab_1" aria-selected="true">Form Address</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content checkout">
+                            <div class="tab-pane fade show active" id="tab_1" role="tabpanel"
+                                 aria-labelledby="tab_1">
+                                <div class="form-group">
+                                    <input type="email"
+                                           class="form-control {{ isInvalid($_SESSION['errors']['email'] ?? null) }}"
+                                           placeholder="Email"
+                                           name="email">
+                                    @isset($_SESSION['errors']['email'])
+                                        <div class="invalid-feedback">
+                                            {{ $_SESSION['errors']['email'] }}
+                                        </div>
+                                    @endisset
+                                </div>
+                                <hr>
+                                <div class="row no-gutters">
+                                    <div class="col-6 form-group pr-1">
+                                        <input type="text" class="form-control {{ isInvalid($_SESSION['errors']['username'] ?? null) }}"
+                                               placeholder="UserName" name="username">
+                                        @isset($_SESSION['errors']['username'])
+                                            <div class="invalid-feedback">
+                                                {{ $_SESSION['errors']['username'] }}
+                                            </div>
+                                        @endisset
+                                    </div>
+                                    <div class="col-6 form-group pl-1">
+                                        <input type="tel" class="form-control {{ isInvalid($_SESSION['errors']['phone'] ?? null) }}" placeholder="Phone" name="phone">
+                                        @isset($_SESSION['errors']['phone'])
+                                            <div class="invalid-feedback">
+                                                {{ $_SESSION['errors']['phone'] }}
+                                            </div>
+                                        @endisset
+                                    </div>
                                 </div>
                                 <!-- /row -->
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Telephone">
+                                    <input type="text" class="form-control {{ isInvalid($_SESSION['errors']['address_shipping'] ?? null) }}"
+                                           placeholder="Full Address"
+                                           name="address_shipping">
+                                    @isset($_SESSION['errors']['address_shipping'])
+                                        <div class="invalid-feedback">
+                                            {{ $_SESSION['errors']['address_shipping'] }}
+                                        </div>
+                                    @endisset
                                 </div>
                             </div>
-                            <!-- /other_addr_c -->
-                            <hr>
+                            <!-- /tab_1 -->
                         </div>
-                        <!-- /tab_1 -->
-                        <div class="tab-pane fade" id="tab_2" role="tabpanel" aria-labelledby="tab_2"
-                             style="position: relative;">
-                            <a href="#0" class="social_bt facebook">Login con Facebook</a>
-                            <a href="#0" class="social_bt google">Login con Google</a>
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Password"
-                                       name="password_in" id="password_in">
-                            </div>
-                            <div class="clearfix add_bottom_15">
-                                <div class="checkboxes float-start">
-                                    <label class="container_check">Remember me
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="float-end"><a id="forgot" href="#0">Lost Password?</a></div>
-                            </div>
-                            <div id="forgot_pw">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" name="email_forgot"
-                                           id="email_forgot" placeholder="Type your email">
-                                </div>
-                                <p>A new password will be sent shortly.</p>
-                                <div class="text-center"><input type="submit" value="Reset Password"
-                                                                class="btn_1"></div>
-                            </div>
-                            <hr>
-                            <input type="submit" class="btn_1 full-width" value="Login">
-                        </div>
-                        <!-- /tab_2 -->
-                    </div>
+                    @endif
                 </div>
                 <!-- /step -->
             </div>
@@ -168,68 +153,24 @@
                     <h3>2. Payment and Shipping</h3>
                     <ul>
                         <li>
-                            <label class="container_radio">Credit Card<a href="#0" class="info"
-                                                                         data-bs-toggle="modal"
-                                                                         data-bs-target="#payments_method"></a>
-                                <input type="radio" name="payment" checked>
+                            <label class="container_radio">Thanh Toan Nhan Hang
+                                <a href="#0" class="info"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#payments_method"></a>
+                                <input type="radio" name="payment" value="0" checked>
                                 <span class="checkmark"></span>
                             </label>
                         </li>
                         <li>
-                            <label class="container_radio">Paypal<a href="#0" class="info"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#payments_method"></a>
-                                <input type="radio" name="payment">
-                                <span class="checkmark"></span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="container_radio">Cash on delivery<a href="#0" class="info"
-                                                                              data-bs-toggle="modal"
-                                                                              data-bs-target="#payments_method"></a>
-                                <input type="radio" name="payment">
-                                <span class="checkmark"></span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="container_radio">Bank Transfer<a href="#0" class="info"
-                                                                           data-bs-toggle="modal"
-                                                                           data-bs-target="#payments_method"></a>
-                                <input type="radio" name="payment">
+                            <label class="container_radio">Momo
+                                <a href="#0" class="info"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#payments_method"></a>
+                                <input type="radio" name="payment" value="1">
                                 <span class="checkmark"></span>
                             </label>
                         </li>
                     </ul>
-                    <div class="payment_info d-none d-sm-block">
-                        <figure><img src="img/cards_all.svg" alt=""></figure>
-                        <p>Sensibus reformidans interpretaris sit ne, nec errem nostrum et, te nec meliore
-                            philosophia. At vix quidam periculis. Solet tritani ad pri, no iisque definitiones
-                            sea.</p>
-                    </div>
-
-                    <h6 class="pb-2">Shipping Method</h6>
-
-
-                    <ul>
-                        <li>
-                            <label class="container_radio">Standard shipping<a href="#0" class="info"
-                                                                               data-bs-toggle="modal"
-                                                                               data-bs-target="#payments_method"></a>
-                                <input type="radio" name="shipping" checked>
-                                <span class="checkmark"></span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="container_radio">Express shipping<a href="#0" class="info"
-                                                                              data-bs-toggle="modal"
-                                                                              data-bs-target="#payments_method"></a>
-                                <input type="radio" name="shipping">
-                                <span class="checkmark"></span>
-                            </label>
-                        </li>
-
-                    </ul>
-
                 </div>
                 <!-- /step -->
 
@@ -239,29 +180,27 @@
                     <h3>3. Order Summary</h3>
                     <div class="box_general summary">
                         <ul>
-                            <li class="clearfix"><em>1x Armor Air X Fear</em> <span>$145.00</span></li>
-                            <li class="clearfix"><em>2x Armor Air Zoom Alpha</em> <span>$115.00</span></li>
+                            @foreach($dataCart as $cart)
+                                <li class="clearfix">
+                                    <em>{{ $cart['quantity'] }}x <strong>{{ $cart['name'] }}</strong></em>
+                                    <span>{{ number_format(($cart['price_offer'] ?: $cart['price']) * $cart['quantity'])}}đ</span>
+                                </li>
+                            @endforeach
                         </ul>
-                        <ul>
-                            <li class="clearfix"><em><strong>Subtotal</strong></em> <span>$450.00</span></li>
-                            <li class="clearfix"><em><strong>Shipping</strong></em> <span>$0</span></li>
-
-                        </ul>
-                        <div class="total clearfix">TOTAL <span>$450.00</span></div>
-                        <div class="form-group">
-                            <label class="container_check">Register to the Newsletter.
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                            </label>
+                        <div class="total clearfix">
+                            TOTAL
+                            <span>{{ number_format(reduce_price($dataCart)) }}đ</span>
                         </div>
+                        {{--                        <a href="{{ routeClient('confirm') }}" class="btn_1 full-width">Confirm and Pay</a>--}}
+                        <input type="hidden" value="{{ reduce_price($dataCart) }}" name="priceTotal">
+                        <button type="submit" class="btn_1 full-width" name="payUrl">Confirm</button>
 
-                        <a href="{{ routeClient('confirm') }}" class="btn_1 full-width">Confirm and Pay</a>
                     </div>
                     <!-- /box_general -->
                 </div>
                 <!-- /step -->
             </div>
-        </div>
+        </form>
         <!-- /row -->
     </div>
 @endsection

@@ -8,18 +8,6 @@ function addToCart(event, id) {
 
     let numberInput = btn_qty ? (+btn_qty.value) : 1;
 
-    // console.log(typeof numberInput);
-    //
-    // console.log(`data: ${numberInput}`)
-
-    //
-    // if (btn_qty) {
-    //     console.log(btn_qty.value)
-    // } else {
-    //     console.log(1)
-    //     console.log('no data input')
-    // }
-
     $.ajax({
         type: "POST",
         url: base_url,

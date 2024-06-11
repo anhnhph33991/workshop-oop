@@ -7,25 +7,31 @@ use LuxChill\Controllers\Client\AuthController;
 use LuxChill\Controllers\Client\CartController;
 use LuxChill\Controllers\Client\CheckOutController;
 use LuxChill\Controllers\Client\HomeController;
-use LuxChill\Controllers\Client\Orders;
+use LuxChill\Controllers\Client\OrderController;
 use LuxChill\Controllers\Client\ShopController;
 
 $router->get('/', HomeController::class . '@index');
 $router->get('/about', function () {
-    echo "Page about";
+	echo "Page about";
 });
 
 $router->get('shops', ShopController::class . '@index');
 //$router->get('shop/{id}', ShopController::class . '@detail');
-$router->get('shop/{slug}', ShopController::class . '@detail');
+
+$router->mount('/shop', function () use ($router) {
+	$router->get('/{slug}/comment', ShopController::class . '@comment');
+	$router->post('/{slug}/handle-comment', ShopController::class . '@handleComment');
+	$router->get('/{slug}', ShopController::class . '@detail');
+});
+
 
 $router->get('/products', function () {
-    echo "Page products";
-    $page = $_GET['page'] ?? 1;
+	echo "Page products";
+	$page = $_GET['page'] ?? 1;
 });
 
 $router->get('/products/{id}', function ($id) {
-    echo "Page product detail = " . $id;
+	echo "Page product detail = " . $id;
 });
 
 $router->get('/cart', CartController::class . '@index');
@@ -35,20 +41,22 @@ $router->get('/cart/delete/{id}', CartController::class . '@delete');
 
 
 $router->get('/check-out', CheckOutController::class . '@index');
+$router->post('/check-out/add', CheckOutController::class . '@add');
+$router->get('/check-out/momo', CheckOutController::class . '@handleMomo');
+
 
 $router->get('/confirm', CheckOutController::class . '@confirm');
 
+$router->get('/track-order', OrderController::class . '@check');
 
-$router->get('/track-order', Orders::class . '@check');
-
-$router->get('/my-orders', function () {
-    echo "Page my-orders";
-});
+$router->get('/my-orders', OrderController::class . '@myOrder');
+$router->get('/my-orders/{id}/delete', OrderController::class . '@delete');
+$router->get('/my-orders/{id}', OrderController::class . '@detail');
 
 $router->get('/account', AccountController::class . '@index');
 
 $router->get('/profile', function () {
-    echo "Page profile";
+	echo "Page profile";
 });
 
 // auth route
@@ -65,5 +73,5 @@ $router->get('/logout', AuthController::class . '@logout');
 
 
 $router->get('/forgot-password', function () {
-    echo "Handle forgot-password";
+	echo "Handle forgot-password";
 });

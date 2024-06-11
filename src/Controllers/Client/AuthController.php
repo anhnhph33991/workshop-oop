@@ -106,7 +106,7 @@ class AuthController extends Controller
 	public function logout()
 	{
 		unset($_SESSION['user']);
-		setToastr('Login success', 'success');
+		setToastr('Logout success', 'success');
 		header('location: ' . routeClient('login'));
 		exit();
 	}

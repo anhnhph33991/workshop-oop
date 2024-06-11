@@ -11,7 +11,11 @@
 	
 	if(isset($_SESSION['user'])){
 	$dataCart = $carts->findByUserId($_SESSION['user']['id']);
-    $countCart = $cartDetail->getCount($dataCart['id']);
+	if(empty($dataCart)){
+		$countCart = 0;
+	}else{
+		$countCart = $cartDetail->getCount($dataCart['id']);
+	}
 	}elseif (isset($_SESSION['cart'])){
 	$countCart = count($_SESSION['cart']);
 	}else{
