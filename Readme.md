@@ -47,3 +47,33 @@ ImageFileRule() => 'Rule check upload ảnh, check nhiều ảnh'
 5 => Da Huy
 6 => Hoan Hang
 ```
+
+
+### Raw Sql Order Details:
+```
+SELECT 
+	p.id as p_id,
+    p.name as p_name, 
+    p.slug as p_slug, 
+    p.image as p_image, 
+    p.price as p_price, 
+    p.price_offer as p_price_offer, 
+    od.id as od_id, 
+    od.qty as od_qty,
+    o.id as o_id,
+    o.user_id as o_user_id,
+    o.user_name as o_user_name,
+    o.user_email as o_user_email
+FROM 
+    order_details as od 
+INNER JOIN 
+    products as p 
+ON 
+    od.product_id = p.id 
+INNER JOIN 
+   	orders as o
+ON
+	od.order_id = o.id
+WHERE 
+	od.order_id IN (25, 26) 
+```
