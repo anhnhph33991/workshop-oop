@@ -2,6 +2,16 @@
 
 const PATH_UPLOAD = "assets/uploads/";
 
+if (!function_exists('dd')) {
+	function dd($data)
+	{
+		echo "<pre>";
+		print_r($data);
+		echo "</pre>";
+		die;
+	}
+}
+
 if (!function_exists('asset')) {
 	function asset($path)
 	{
@@ -34,74 +44,26 @@ if (!function_exists('upload_file')) {
 	}
 }
 
-//if (!function_exists('upload_multifile')) {
-//	function upload_multifile($image)
-//	{
-//		$uploadedFiles = []; // Mảng lưu trữ tên các ảnh đã upload
-//
-//		// Loop qua từng file được upload từ form
-//		foreach ($image['tmp_name'] as $key => $tmp_name) {
-//			$fileName = $image['name'][$key];
-//			$fileSize = $image['size'][$key];
-//			$fileTmp = $image['tmp_name'][$key];
-//			$fileType = $image['type'][$key];
-//
-//			// Kiểm tra xem file có phải là ảnh không
-//			$allowedExtensions = array("jpeg", "jpg", "png");
-//			$fileParts = explode('.', $fileName);
-//			$fileExtension = strtolower(end($fileParts));
-//
-//			if (in_array($fileExtension, $allowedExtensions) === false) {
-//				echo "Chỉ cho phép upload file ảnh có định dạng JPEG, JPG, PNG.";
-//				exit();
-//			}
-//
-//			// Tạo đường dẫn cho file upload
-//			$uploadPath = PATH_UPLOAD . time() . '-' . basename($fileName);
-//
-//			// Di chuyển file vào thư mục uploads
-//			if (move_uploaded_file($fileTmp, $uploadPath)) {
-//				$uploadedFiles[] = $uploadPath; // Lưu tên file vào mảng
-//			} else {
-////				echo "Có lỗi xảy ra khi upload file.";
-//				$_SESSION['errors']['image'] = 'Có lỗi xảy ra khi upload file 😢😿';
-//				header('location: ' . routeAdmin('products/create'));
-//				exit();
-//			}
-//		}
-//
-//		// Tạo chuỗi string từ tên các ảnh
-//		$imageString = implode(",", $uploadedFiles);
-//		// echo "Các ảnh đã được upload: " . $imageString;
-//		return $imageString;
-//	}
-//}
-
 if (!function_exists('upload_multifile')) {
 	function upload_multifile($image)
 	{
-		$uploadedFiles = []; // Mảng lưu trữ tên các ảnh đã upload
-
-		// Loop qua từng file được upload từ form
+		$uploadedFiles = [];
 		foreach ($image['tmp_name'] as $key => $tmp_name) {
 			$fileName = $image['name'][$key];
 			$fileSize = $image['size'][$key];
 			$fileTmp = $image['tmp_name'][$key];
 			$fileType = $image['type'][$key];
 
-			// Tạo đường dẫn cho file upload
 			$uploadPath = PATH_UPLOAD . time() . '-' . basename($fileName);
 
-			// Di chuyển file vào thư mục uploads
 			if (!move_uploaded_file($fileTmp, $uploadPath)) {
-				// Lỗi khi di chuyển file, trả về false
 				return false;
 			}
 
-			$uploadedFiles[] = $uploadPath; // Lưu tên file vào mảng
+			$uploadedFiles[] = $uploadPath;
 		}
 
-		return implode(",", $uploadedFiles); // Trả về mảng tên các file đã upload
+		return implode(",", $uploadedFiles);
 	}
 }
 
@@ -171,11 +133,11 @@ if (!function_exists('middleware_auth')) {
 if (!function_exists('middleware_login')) {
 	function middleware_login($password, $user)
 	{
-//		$check = password_verify($password, $user['password']);
+		//		$check = password_verify($password, $user['password']);
 
-//		echo "<pre>";
-//		var_dump($check);
-//		echo "</pre>";
+		//		echo "<pre>";
+		//		var_dump($check);
+		//		echo "</pre>";
 
 
 		if (password_verify($password, $user['password'])) {
@@ -189,7 +151,7 @@ if (!function_exists('middleware_login')) {
 				header('location: ' . routeClient());
 				exit();
 			}
-//			echo "success";
+			//			echo "success";
 		} else {
 			$_SESSION['errors']['password'] = 'Password k chinh xac';
 			header('location: ' . routeClient('login'));
@@ -269,7 +231,7 @@ if (!function_exists('formatStrlen')) {
 if (!function_exists('reduce_price')) {
 	function reduce_price($data)
 	{
-		return array_reduce($data, function($total, $items){
+		return array_reduce($data, function ($total, $items) {
 			return $total + (($items['price_offer'] ?: $items['price']) * $items['quantity']);
 		}, 0);
 	}
@@ -277,16 +239,20 @@ if (!function_exists('reduce_price')) {
 
 // momo
 
-if(!function_exists('execPostRequest')){
+if (!function_exists('execPostRequest')) {
 	function execPostRequest($url, $data)
 	{
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		curl_setopt(
+			$ch,
+			CURLOPT_HTTPHEADER,
+			array(
 				'Content-Type: application/json',
-				'Content-Length: ' . strlen($data))
+				'Content-Length: ' . strlen($data)
+			)
 		);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
@@ -298,7 +264,7 @@ if(!function_exists('execPostRequest')){
 	}
 }
 
-if(!function_exists('momo')){
+if (!function_exists('momo')) {
 	function momo($price)
 	{
 		$endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
@@ -360,10 +326,10 @@ if(!function_exists('momo')){
 if (!function_exists('createSlug')) {
 	function createSlug($string)
 	{
-//		$string = removeAccents($string);
-//		$string = preg_replace('/\s+/', '-', $string);
-//		$string = strtolower($string);
-//		return $string . '-' . time();
+		//		$string = removeAccents($string);
+		//		$string = preg_replace('/\s+/', '-', $string);
+		//		$string = strtolower($string);
+		//		return $string . '-' . time();
 
 		$string = removeAccents($string);
 		// Thay thế các ký tự không phải là chữ cái hoặc số bằng dấu gạch ngang
@@ -383,37 +349,142 @@ if (!function_exists('removeAccents')) {
 	function removeAccents($string)
 	{
 		$transliterationTable = array(
-			'á' => 'a', 'à' => 'a', 'ả' => 'a', 'ã' => 'a', 'ạ' => 'a',
-			'ă' => 'a', 'ắ' => 'a', 'ằ' => 'a', 'ẳ' => 'a', 'ẵ' => 'a', 'ặ' => 'a',
-			'â' => 'a', 'ấ' => 'a', 'ầ' => 'a', 'ẩ' => 'a', 'ẫ' => 'a', 'ậ' => 'a',
-			'é' => 'e', 'è' => 'e', 'ẻ' => 'e', 'ẽ' => 'e', 'ẹ' => 'e',
-			'ê' => 'e', 'ế' => 'e', 'ề' => 'e', 'ể' => 'e', 'ễ' => 'e', 'ệ' => 'e',
-			'í' => 'i', 'ì' => 'i', 'ỉ' => 'i', 'ĩ' => 'i', 'ị' => 'i',
-			'ó' => 'o', 'ò' => 'o', 'ỏ' => 'o', 'õ' => 'o', 'ọ' => 'o',
-			'ô' => 'o', 'ố' => 'o', 'ồ' => 'o', 'ổ' => 'o', 'ỗ' => 'o', 'ộ' => 'o',
-			'ơ' => 'o', 'ớ' => 'o', 'ờ' => 'o', 'ở' => 'o', 'ỡ' => 'o', 'ợ' => 'o',
-			'ú' => 'u', 'ù' => 'u', 'ủ' => 'u', 'ũ' => 'u', 'ụ' => 'u',
-			'ư' => 'u', 'ứ' => 'u', 'ừ' => 'u', 'ử' => 'u', 'ữ' => 'u', 'ự' => 'u',
-			'ý' => 'y', 'ỳ' => 'y', 'ỷ' => 'y', 'ỹ' => 'y', 'ỵ' => 'y',
+			'á' => 'a',
+			'à' => 'a',
+			'ả' => 'a',
+			'ã' => 'a',
+			'ạ' => 'a',
+			'ă' => 'a',
+			'ắ' => 'a',
+			'ằ' => 'a',
+			'ẳ' => 'a',
+			'ẵ' => 'a',
+			'ặ' => 'a',
+			'â' => 'a',
+			'ấ' => 'a',
+			'ầ' => 'a',
+			'ẩ' => 'a',
+			'ẫ' => 'a',
+			'ậ' => 'a',
+			'é' => 'e',
+			'è' => 'e',
+			'ẻ' => 'e',
+			'ẽ' => 'e',
+			'ẹ' => 'e',
+			'ê' => 'e',
+			'ế' => 'e',
+			'ề' => 'e',
+			'ể' => 'e',
+			'ễ' => 'e',
+			'ệ' => 'e',
+			'í' => 'i',
+			'ì' => 'i',
+			'ỉ' => 'i',
+			'ĩ' => 'i',
+			'ị' => 'i',
+			'ó' => 'o',
+			'ò' => 'o',
+			'ỏ' => 'o',
+			'õ' => 'o',
+			'ọ' => 'o',
+			'ô' => 'o',
+			'ố' => 'o',
+			'ồ' => 'o',
+			'ổ' => 'o',
+			'ỗ' => 'o',
+			'ộ' => 'o',
+			'ơ' => 'o',
+			'ớ' => 'o',
+			'ờ' => 'o',
+			'ở' => 'o',
+			'ỡ' => 'o',
+			'ợ' => 'o',
+			'ú' => 'u',
+			'ù' => 'u',
+			'ủ' => 'u',
+			'ũ' => 'u',
+			'ụ' => 'u',
+			'ư' => 'u',
+			'ứ' => 'u',
+			'ừ' => 'u',
+			'ử' => 'u',
+			'ữ' => 'u',
+			'ự' => 'u',
+			'ý' => 'y',
+			'ỳ' => 'y',
+			'ỷ' => 'y',
+			'ỹ' => 'y',
+			'ỵ' => 'y',
 			'đ' => 'd',
-			'Á' => 'A', 'À' => 'A', 'Ả' => 'A', 'Ã' => 'A', 'Ạ' => 'A',
-			'Ă' => 'A', 'Ắ' => 'A', 'Ằ' => 'A', 'Ẳ' => 'A', 'Ẵ' => 'A', 'Ặ' => 'A',
-			'Â' => 'A', 'Ấ' => 'A', 'Ầ' => 'A', 'Ẩ' => 'A', 'Ẫ' => 'A', 'Ậ' => 'A',
-			'É' => 'E', 'È' => 'E', 'Ẻ' => 'E', 'Ẽ' => 'E', 'Ẹ' => 'E',
-			'Ê' => 'E', 'Ế' => 'E', 'Ề' => 'E', 'Ể' => 'E', 'Ễ' => 'E', 'Ệ' => 'E',
-			'Í' => 'I', 'Ì' => 'I', 'Ỉ' => 'I', 'Ĩ' => 'I', 'Ị' => 'I',
-			'Ó' => 'O', 'Ò' => 'O', 'Ỏ' => 'O', 'Õ' => 'O', 'Ọ' => 'O',
-			'Ô' => 'O', 'Ố' => 'O', 'Ồ' => 'O', 'Ổ' => 'O', 'Ỗ' => 'O', 'Ộ' => 'O',
-			'Ơ' => 'O', 'Ớ' => 'O', 'Ờ' => 'O', 'Ở' => 'O', 'Ỡ' => 'O', 'Ợ' => 'O',
-			'Ú' => 'U', 'Ù' => 'U', 'Ủ' => 'U', 'Ũ' => 'U', 'Ụ' => 'U',
-			'Ư' => 'U', 'Ứ' => 'U', 'Ừ' => 'U', 'Ử' => 'U', 'Ữ' => 'U', 'Ự' => 'U',
-			'Ý' => 'Y', 'Ỳ' => 'Y', 'Ỷ' => 'Y', 'Ỹ' => 'Y', 'Ỵ' => 'Y',
+			'Á' => 'A',
+			'À' => 'A',
+			'Ả' => 'A',
+			'Ã' => 'A',
+			'Ạ' => 'A',
+			'Ă' => 'A',
+			'Ắ' => 'A',
+			'Ằ' => 'A',
+			'Ẳ' => 'A',
+			'Ẵ' => 'A',
+			'Ặ' => 'A',
+			'Â' => 'A',
+			'Ấ' => 'A',
+			'Ầ' => 'A',
+			'Ẩ' => 'A',
+			'Ẫ' => 'A',
+			'Ậ' => 'A',
+			'É' => 'E',
+			'È' => 'E',
+			'Ẻ' => 'E',
+			'Ẽ' => 'E',
+			'Ẹ' => 'E',
+			'Ê' => 'E',
+			'Ế' => 'E',
+			'Ề' => 'E',
+			'Ể' => 'E',
+			'Ễ' => 'E',
+			'Ệ' => 'E',
+			'Í' => 'I',
+			'Ì' => 'I',
+			'Ỉ' => 'I',
+			'Ĩ' => 'I',
+			'Ị' => 'I',
+			'Ó' => 'O',
+			'Ò' => 'O',
+			'Ỏ' => 'O',
+			'Õ' => 'O',
+			'Ọ' => 'O',
+			'Ô' => 'O',
+			'Ố' => 'O',
+			'Ồ' => 'O',
+			'Ổ' => 'O',
+			'Ỗ' => 'O',
+			'Ộ' => 'O',
+			'Ơ' => 'O',
+			'Ớ' => 'O',
+			'Ờ' => 'O',
+			'Ở' => 'O',
+			'Ỡ' => 'O',
+			'Ợ' => 'O',
+			'Ú' => 'U',
+			'Ù' => 'U',
+			'Ủ' => 'U',
+			'Ũ' => 'U',
+			'Ụ' => 'U',
+			'Ư' => 'U',
+			'Ứ' => 'U',
+			'Ừ' => 'U',
+			'Ử' => 'U',
+			'Ữ' => 'U',
+			'Ự' => 'U',
+			'Ý' => 'Y',
+			'Ỳ' => 'Y',
+			'Ỷ' => 'Y',
+			'Ỹ' => 'Y',
+			'Ỵ' => 'Y',
 			'Đ' => 'D',
 		);
 
 		return strtr($string, $transliterationTable);
 	}
 }
-
-
-

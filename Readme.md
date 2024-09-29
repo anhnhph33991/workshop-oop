@@ -1,8 +1,17 @@
 # Xưởng PHP OOP
-## Mentor: ``` Thầy Đức Lucifer ```
 
+#### Thư Viện:
+
+```
+    "bramus/router": "composer require bramus/router ~1.6"
+    "eftec/bladeone": "composer require eftec/bladeone"
+    "doctrine/dbal": "composer require doctrine/dbal"
+    "rakit/validation": "composer require "rakit/validation" "
+    "vlucas/phpdotenv": "composer require vlucas/phpdotenv"
+```
 
 #### Function helpers:
+
 ```
 assets()           => 'Đường dẫn assets'
 routeClient()      => 'Đường dẫn client'
@@ -28,7 +37,8 @@ createSlug()       => 'create slug format `-` Vd: Quần áo => 'quan-ao'
 
 ```
 
-#### Change rules:
+#### Create Rules:
+
 ```
 Digits() => 'Bắt đầu bằng các đầu số 03,05,07,08,09. Theo sau là : 2,6,8,9. VD: 0367253666'
 UniqueEmailRule() => 'Rule check trùng email($id) , update sẽ dựa theo id của email đó ra còn các email khác trùng sẽ báo'
@@ -38,6 +48,7 @@ ImageFileRule() => 'Rule check upload ảnh, check nhiều ảnh'
 ```
 
 ### Status Order:
+
 ```
 0 => Cho Xac Nhan
 1 => Da Xac Nhan
