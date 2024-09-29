@@ -1,6 +1,13 @@
 # Xưởng PHP OOP
-## Mentor: ``` Thầy Đức Lucifer ```
+#### Thư Viện:
 
+```
+    "bramus/router": "composer require bramus/router ~1.6"
+    "eftec/bladeone": "composer require eftec/bladeone"
+    "doctrine/dbal": "composer require doctrine/dbal"
+    "rakit/validation": "composer require "rakit/validation" "
+    "vlucas/phpdotenv": "composer require vlucas/phpdotenv"
+```
 
 #### Function helpers:
 ```
